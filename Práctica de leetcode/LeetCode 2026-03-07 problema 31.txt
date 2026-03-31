@@ -1,0 +1,41 @@
+public class Solution {
+    public void NextPermutation(int[] nums) {
+        // La siguiente permutación debe ser la menor cantidad de números a invertir
+        // de posición que permita que el número creado sea mayor que el anterior
+        if(nums == null || nums.Length <= 1) return;
+        
+        int n = nums.Length;
+        // - 2 porque las posiciones de un arreglo empiezan con 0, de otro modo sería -1
+        int i = n - 2;
+
+        // Busca el primer valor que sea menor que el del final
+        while(i >= 0 && nums[i] >= nums[i + 1]) i--;
+
+        if(i >= 0){
+            int j = n - 1;
+            // Busca el primer valor que sea mayor que nums[i]
+            while(j > i && nums[j] <= nums[i]) j--;
+
+            ValueChange(nums, i, j);
+        }
+
+        // Invierte el resto de los números.
+        // Si ya se encontró la última permutación posible, se invierte para devolver
+        // la primera permutación, que tiene el menor valor
+        ReverseRest(nums, i + 1, n - 1);
+    }
+
+    private void ValueChange(int[] arr, int i, int j){
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    // Auxiliar para llamar ValueChange múltiples veces
+    private void ReverseRest(int[] arr, int start, int end){
+        while(start < end){
+            ValueChange(arr, start, end);
+            start++; end--;
+        }
+    }
+}

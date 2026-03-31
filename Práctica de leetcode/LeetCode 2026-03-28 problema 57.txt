@@ -1,0 +1,25 @@
+public class Solution {
+    public int[][] Insert(int[][] intervals, int[] newInterval) {
+        // Uso de intervalos sobrepuestos
+        List<int[]> result = new List<int[]>();
+
+        foreach(int[] interval in intervals){
+            // Si el intervalo a insertar es menor que el considerado
+            if(interval[0] > newInterval[1]){
+                result.Add(newInterval);
+                newInterval = interval;
+            } 
+            // Si el intervalo es mayor
+            else if(interval[1] < newInterval[0]) result.Add(interval);
+            // Si se pueden mezclar
+            else{
+                newInterval[0] = Math.Min(newInterval[0], interval[0]);
+                newInterval[1] = Math.Max(newInterval[1], interval[1]);
+            }
+        }
+
+        result.Add(newInterval);
+
+        return result.ToArray();
+    }
+}

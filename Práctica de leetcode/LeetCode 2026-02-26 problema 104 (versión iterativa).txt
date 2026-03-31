@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    // Clase auxiliar para almacenar el nivel actual
+    public class NodeDepth{
+        public TreeNode Node {get;}
+        public int Depth {get;}
+        public NodeDepth(TreeNode node, int depth){
+            Node = node;
+            Depth = depth;
+        }
+    }
+    public int MaxDepth(TreeNode root) {
+        // Versión de DFS iterativa que usa una pila
+        if(root == null) return 0;
+        
+        int maxDepth = 0;
+
+        Stack<NodeDepth> nodes = new Stack<NodeDepth>();
+        nodes.Push(new NodeDepth(root, 1)); // Permite iniciar el ciclo
+        
+        while(nodes.Count != 0){
+            // Obtiene y usa las propiedades del nodo
+            NodeDepth cur = nodes.Pop();
+            TreeNode curNode = cur.Node;
+            // Se revisa si la profundidad actual es el mayor valor encontrado hasta ese punto
+            int curDepth = cur.Depth;
+            maxDepth = Math.Max(maxDepth, curDepth);
+            // Se agregan los nodos hijos, si existen
+            if(curNode.left != null) nodes.Push(new NodeDepth(curNode.left, curDepth + 1));
+            if(curNode.right != null) nodes.Push(new NodeDepth(curNode.right, curDepth + 1));
+        }
+        
+        return maxDepth;
+    }
+}

@@ -1,0 +1,20 @@
+public class Solution {
+    public IList<IList<int>> Generate(int numRows) {
+        IList<IList<int>> rows = new List<IList<int>>();
+        for(int i = 0; i < numRows; i++){
+            IList<int> row = new List<int>();
+            // Prepara el triángulo para sumar
+            for(int j = 0; j <= i; j++){
+                row.Add(1);
+            }
+            // Omite el primer y último valor de la fila
+            for(int j = 1; j < i; j++){
+                row[j] = rows[i-1][j-1] + rows[i-1][j];
+                // row.Insert(j, rows[i-1][j-1] + rows[i-1][j]);
+            }
+            rows.Add(row);
+        }
+
+        return rows;
+    }
+}

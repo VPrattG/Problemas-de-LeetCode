@@ -1,0 +1,31 @@
+public class Solution {
+    public int FindKthLargest(int[] nums, int k) {
+        // Versión con Quickselect
+        List<int> list = new List<int>(nums);
+        return QuickSelection(list, k);
+    }
+    
+    public int QuickSelection(List<int> nums, int k){
+        // Caso base
+        if(nums.Count == 1) return nums[0];
+        
+        int pivotIndex = new Random().Next(nums.Count);
+        int pivot = nums[pivotIndex];
+
+        List<int> less = new List<int>();
+        List<int> equal = new List<int>();
+        List<int> great = new List<int>();
+
+        foreach(int num in nums){
+            if(num > pivot) great.Add(num);
+            else if(num < pivot) less.Add(num);
+            else equal.Add(num);
+        }
+
+        // Decisión de qué lista usar para la recursividad
+        if(k <= great.Count) return QuickSelection(great, k);
+        if(great.Count + equal.Count < k) return QuickSelection(less, k - great.Count - equal.Count);
+
+        return pivot;
+    }
+}

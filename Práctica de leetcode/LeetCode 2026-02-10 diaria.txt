@@ -1,0 +1,55 @@
+public class Solution {
+    public int LongestBalanced(int[] nums) {
+        if(nums.Length == 0) return 0;
+        
+        int maxLength = 0;
+        int left = 0;
+        int curSize = 0;
+
+        // HashSet<int> even = new HashSet<int>();
+        // HashSet<int> odd = new HashSet<int>();
+        // Dictionary<int, int> odd = new Dictionary<int, int>();
+        // Dictionary<int, int> even = new Dictionary<int, int>();
+        
+        for(int right = 0; right < nums.Length; right++){
+            Dictionary<int, int> odd = new Dictionary<int, int>();
+            Dictionary<int, int> even = new Dictionary<int, int>();
+            for(int j = right; j < nums.Length; j++){
+                Dictionary<int, int> dic = nums[j] % 2 == 0 ? even : odd;
+                dic[nums[j]] = dic.GetValueOrDefault(nums[j]) + 1;
+
+                if(even.Count == odd.Count){
+                    maxLength = Math.Max(maxLength, j-right+1);
+                }
+            }
+            // if(nums[right] % 2 == 0 && !even.Contains(nums[right])){
+            //     even[nums[right]] = right;
+            //     // even.Add(nums[right]);
+            //     Console.WriteLine($"Current even amount: {even.Count}, {nums[right]}");}
+            // else if(nums[right] % 2 != 0 && !odd.Contains(nums[right])){
+            //     odd.Add(nums[right]);
+            //     Console.WriteLine($"Current odd amount: {odd.Count}, {nums[right]}");}
+            
+            // curSize = even.Count + odd.Count;
+            // Console.WriteLine($"Current total size: {curSize}");
+            
+            // while(even.Count != odd.Count && curSize > 1){ // insertar lógica
+            //     if(nums[left] % 2 == 0){
+            //         even.Remove(nums[left]);
+            //         Console.WriteLine($"Reduced even total: {even.Count}, {nums[left]}");}
+            //     else{
+            //         odd.Remove(nums[left]);
+            //         Console.WriteLine($"Reduced odd total: {odd.Count}, {nums[left]}");}
+            //     left++;
+            //     curSize--;
+            //     Console.WriteLine($"Current total size: {curSize}");
+            // }
+            
+            // maxLength = Math.Max(maxLength, curSize);
+            // Console.WriteLine($"Current max value {maxLength}");
+           
+        }
+        
+        return maxLength;
+    }
+}

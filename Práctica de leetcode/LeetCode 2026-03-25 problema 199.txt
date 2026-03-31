@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public IList<int> RightSideView(TreeNode root) {
+        // Versión que usa BFS
+        if(root == null) return new List<int>();
+
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        q.Enqueue(root);
+        IList<int> result = new List<int>();
+
+        while(q.Count > 0){
+            int levelSize = q.Count;
+            
+            for(int i = 0; i < levelSize; i++){
+                TreeNode node = q.Dequeue();
+                
+                // levelSize - 1 permite saber si es el elemento hasta la derecha
+                // Visto de otro modo, es como si se buscara saber si se llegó al final del ciclo for
+                if(i == levelSize - 1) result.Add(node.val);
+                // Se debe escribir la condición para buscar en ambos nodos de todos modos
+                if(node.left != null) q.Enqueue(node.left);
+                if(node.right != null) q.Enqueue(node.right);
+            }
+        }
+
+        return result;
+    }
+}

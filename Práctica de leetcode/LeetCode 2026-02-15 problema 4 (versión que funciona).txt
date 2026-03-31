@@ -1,0 +1,55 @@
+public class Solution {
+    public double FindMedianSortedArrays(int[] nums1, int[] nums2) {
+        int l1 = nums1.Length, l2 = nums2.Length;
+        
+        if(l1 > l2) return FindMedianSortedArrays(nums2, nums1);
+        
+        // if(nums1.Length == 0) 
+        //     return l2 % 2 == 0 ? nums2[l2/2] : (nums2[l2 / 2 - 1] + nums2[l2/2]) / 2;
+        // if(nums2.Length == 0) 
+        //     return l1 % 2 == 0 ? nums1[l1/2] : (nums1[l1 / 2 - 1] + nums1[l1/2]) / 2;
+
+        int length = l1 + l2 + 1;
+
+        // Permite obtener la mitad aunque el arreglo tenga una cantidad par o impar de valores
+        int half = length / 2;
+        int low = 0;
+        int high = l1;
+
+        // Inicio de búsqueda binaria
+        while(low <= high) {
+            // El corte hecho en el primer arreglo
+            int cut1 = low + (high - low) / 2;
+            // El corte hecho en el segundo arreglo
+            int cut2 = half - cut1;
+
+            // El valor más grande antes del corte en el arreglo 1
+            int maxL1 = (cut1 == 0) ? Int32.MinValue : nums1[cut1 - 1];
+            // El valor más pequeño después del corte en el arreglo 2
+            int minR1 = (cut1 == l1) ? Int32.MaxValue : nums1[cut1];
+            
+            // El valor más grande antes del corte en el arreglo 2
+            int maxL2 = (cut2 == 0) ? Int32.MinValue : nums2[cut2 - 1];
+            // El valor más pequeño después del corte en el arreglo 1
+            int minR2 = (cut2 == l2) ? Int32.MaxValue : nums2[cut2];
+
+            if(maxL1 <= minR2 && maxL2 <= minR1){
+                if((length - 1) % 2 == 0){
+                    return (Math.Max(maxL1, maxL2) + Math.Min(minR1, minR2)) / 2.0;
+                }
+                else
+                    return Convert.ToDouble(Math.Max(maxL1, maxL2));
+            }
+            else if(maxL1 > minR2){
+                // Se mueve un número a la mitad derecha
+                high = cut1 - 1;
+            }
+            else{
+                // Se mueve un número a la mitad izquierda
+                low = cut1 + 1;
+            }
+        }
+        
+        return 0.0;
+    }
+}

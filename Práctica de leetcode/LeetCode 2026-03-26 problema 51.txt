@@ -1,0 +1,54 @@
+public class Solution {
+    public IList<IList<string>> SolveNQueens(int n) {
+        IList<IList<string>> result = new List<IList<string>>();
+        IList<string> queens = new List<string>();
+
+        for(int i = 0; i < n; i++) queens.Add(new string('.', n));
+
+        Solve(n, result, queens, 0);
+        return result;
+    }
+    
+    // Auxiliar para rellenar los espacios con Q
+    public void Solve(int n, IList<IList<string>> result, IList<string> queens, int row){
+        // Para cuando se encuentra un caso exitoso
+        if(row == n){
+            result.Add(new List<string>(queens));
+            return;
+        }
+
+        for(int col = 0; col < n; col++){
+            // Comprueba que la casilla actual sea válida
+            if(IsValid(n, queens, col, row)){
+                // Se agrega una Q y busca que funcione
+                char[] rowChars = queens[row].ToCharArray();
+                rowChars[col] = 'Q';
+                queens[row] = new string(rowChars);
+
+                Solve(n, result, queens, row + 1);
+
+                // Práctica estándar para vuelta atrás
+                rowChars[col] = '.';
+                queens[row] = new string(rowChars);
+            }
+        }
+    }
+    
+    // Auxiliar para comprobar que una casilla es válida
+    public bool IsValid(int n, IList<string> queens, int col, int row){
+        // Revisa los elementos superiores en la columna
+        for(int i = 0; i < n; i++){
+            if(queens[i][col] == 'Q') return false;
+        }
+        // Revisa la diagonal arriba-izquierda
+        for(int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--){
+            if(queens[i][j] == 'Q') return false;
+        }
+        // Revisa la diagonal arriba-derecha
+        for(int i = row - 1, j = col + 1; i >= 0 && j < n; i--, j++){
+            if(queens[i][j] == 'Q') return false;
+        }
+
+        return true;
+    }
+}

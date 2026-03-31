@@ -1,0 +1,28 @@
+public class Solution {
+    public void Rotate(int[][] matrix) {
+        // Versión que invierte en diagonal y luego por fila
+        int n = matrix.Length;
+        
+        for(int i = 0; i < n; i++){
+            for(int j = i + 1; j < n; j++){
+                // Cambia los valores en diagonal
+                // Ejemplo, los valores en [0, 1] y [1, 0 son intercambiados]
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+
+        // Invierte los valores de cada fila
+        for(int i = 0; i < n; i++){
+            int left = 0, right = n - 1;
+            while(left < right){
+                int temp = matrix[i][left];
+                matrix[i][left] = matrix[i][right];
+                matrix[i][right] = temp;
+                left++;
+                right--;
+            }
+        }
+    }
+}

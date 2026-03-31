@@ -1,0 +1,41 @@
+public class Solution {
+    public string ReverseWords(string s) {
+        // Versión sin trim, split, reverse o una pila
+        StringBuilder sb = new StringBuilder();
+        
+        for(int i = s.Length - 1; i >= 0; i--){
+            if(s[i] == ' ') continue;
+            
+            // Para revisar dónde concluye la palabra actual
+            int j = i;
+
+            while(j > 0 && s[j - 1] != ' '){
+                j--;
+            }
+
+            // s[j..(i + 1)] permite agregar varios valores de una
+            sb.Append(s[j..(i + 1)]);
+
+            // Revisa si hay otra palabra después de los espacios a la izquierda
+            // y agrega un espacio si es así
+            bool lastSpace = false;
+            int k = j - 1;
+            
+            while(k >= 0){
+                if(s[k] != ' '){
+                    lastSpace = true;
+                    break;
+                }
+
+                k--;
+            }
+
+            if(lastSpace) sb.Append(' ');
+
+            // Para evitar agregar palabras incompletas
+            i = j;
+        }
+
+        return sb.ToString();
+    }
+}

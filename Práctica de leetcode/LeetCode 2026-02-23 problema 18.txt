@@ -1,0 +1,58 @@
+public class Solution {
+    public IList<IList<int>> FourSum(int[] nums, int target) {
+        // Método que usa el patrón de dos punteros
+        // Se usa long para evitar desbordamientos de datos
+        // Lista donde se almacenarán las combinaciones posibles
+        IList<IList<int>> answers = new List<IList<int>>();
+        int size = nums.Length;
+        
+        // En casos donde el arreglo tiene menos de 4 números, se devuelve una lista vacía
+        if (nums == null || size < 4) return answers;
+
+        Array.Sort(nums);
+        
+        // Se usó la respuesta de 3sum como base para esta solución
+        // Al usar 4 valores, se agrega otro ciclo para el nuevo puntero fijo
+        for(int i = 0; i < size - 3; i++){
+            // Se omiten elementos repetidos para reducir el tiempo de ejecución
+            if(i > 0 && nums[i] == nums[i - 1]) continue;
+            
+            // Si los números más pequeños tienen mayor valor combinado que el objetivo,
+            // ninguna otra combinación podrá valer menos
+            if((long)nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) break;
+            
+            // Si la suma de i con los números más grandes es menor al objetivo,
+            // se omiten las demás pruebas
+            if((long)nums[i] + nums[size - 1] + nums[size - 2] + nums[size - 3] < target) continue;
+            
+            // Esto es casi idéntico a lo de 3sum
+            for(int j = i + 1; j < size - 2; j++){
+                // Estos ifs deben ser incluidos, de otro modo agrega respuestas repetidas
+                    // Evita elementos duplicados
+                if(j > i + 1 && nums[j] == nums[j - 1]) continue;
+                    // Si la suma más chica es mayor al objetivo
+                if((long)nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target) break;
+                    // Si los números más grandes son menores que el objetivo
+                if((long)nums[i] + nums[j] + nums[size - 1] + nums[size - 2] < target) continue;
+
+                int k = j + 1, l = size - 1;
+                
+                while(k < l){
+                    long sum = (long)nums[i] + nums[j] + nums[k] + nums[l];
+                    
+                    if(sum == target){
+                        answers.Add([nums[i], nums[j], nums[k], nums[l]]);
+                        k++; l--;
+
+                        while(k < l && nums[k] == nums[k - 1]) k++;
+                        while(k < l && nums[l] == nums[l + 1]) l--;
+                    }
+                    else if(sum < target) k++;
+                    else l--;
+                }
+            }
+        }
+
+        return answers;
+    }
+}

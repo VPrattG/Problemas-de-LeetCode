@@ -1,0 +1,31 @@
+public class Solution {
+    public IList<string> GenerateParenthesis(int n) {
+        IList<string> result = new List<string>();
+        StringBuilder sb = new StringBuilder();
+        AuxBacktracking(result, sb, n, 0, 0);
+        return result;
+    }
+
+    // Función recursiva de apoyo para el problema
+    public void AuxBacktracking(IList<string> result, StringBuilder sb, int max, int left, int right){
+        // Cuando se añade el límite de paréntesis
+        if(left == max && right == max){
+            result.Add(sb.ToString());
+            return;
+        }
+        
+        // Si el límite de paréntesis no ha sido alcanzado
+        if(left < max){
+            sb.Append('(');
+            AuxBacktracking(result, sb, max, left + 1, right);
+            sb.Length--; // Evita añadir ( excesivos
+        }
+
+        // Si hay paréntesis por cerrar
+        if(right < left){
+            sb.Append(')');
+            AuxBacktracking(result, sb, max, left, right + 1);
+            sb.Length--; // Evita añadir ) excesivos
+        }
+    }
+}

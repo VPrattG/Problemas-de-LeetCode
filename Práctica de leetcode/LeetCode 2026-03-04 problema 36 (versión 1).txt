@@ -1,0 +1,19 @@
+public class Solution {
+    public bool IsValidSudoku(char[][] board) {
+        HashSet<string> hs = new HashSet<string>();
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                char val = board[i][j];
+                if(val != '.'){
+                    // Add es un bool, así que algún error al insertar valores
+                    // puede usarse como clave que el sudoku no es válido
+                    if(!hs.Add($"{val} in row {i}") ||
+                    !hs.Add($"{val} in col {j}") ||
+                    !hs.Add($"{val} in subgrid {i/3}-{j/3}") )
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+}

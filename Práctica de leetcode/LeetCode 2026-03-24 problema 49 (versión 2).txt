@@ -1,0 +1,28 @@
+public class Solution {
+    public IList<IList<string>> GroupAnagrams(string[] strs) {
+        // Para agrupar palabras con la misma cantidad de letras mediante una clave
+        var anagrams = new Dictionary<string, List<string>>();
+
+        foreach(string word in strs){
+            // Permite reducir la cantidad de espacio utilizado.
+            char[] count = new char[26];
+            
+            foreach(char c in word) count[c - 'a']++;
+            
+            // Junta todos los caracteres en una clave
+            var key = new string(count);
+
+            // Busca la clave en el diccionario
+            if(!anagrams.TryGetValue(key, out var list)){
+                list = new List<string>();
+                anagrams[key] = list;
+            }
+            
+            // Permite agrupar las palabras con la misma clave
+            list.Add(word);
+        }
+
+        // Extrae las listas del diccionario
+        return new List<IList<string>>(anagrams.Values);
+    }
+}

@@ -1,0 +1,29 @@
+public class Solution {
+    public IList<IList<int>> Permute(int[] nums) {
+        IList<IList<int>> permutations = new List<IList<int>>();
+        Backtracking(nums, new List<int>(), new bool[nums.Length], permutations);
+        return permutations;
+    }
+    
+    private void Backtracking(int[] nums, List<int> current, bool[] usedNums, IList<IList<int>> permutations) {
+        // Imita el comportamiento de LinkedHashSet (lhs) de Java con List<int> y bool[]
+        // visto en https://www.youtube.com/watch?v=H0nKa9Jflgs
+        if (current.Count == nums.Length) {
+            permutations.Add(new List<int>(current));
+            return;
+        }
+
+        for (int i = 0; i < nums.Length; i++) {
+            // !lhs.contains(nums[i])
+            if(!usedNums[i]){ 
+                // lhs.add(nums[i])
+                usedNums[i] = true;
+                current.Add(nums[i]);
+                Backtracking(nums, current, usedNums, permutations);
+                // Equivalente de lhs.remove para esta situación
+                current.RemoveAt(current.Count - 1);
+                usedNums[i] = false;
+            }
+        }
+    }
+}

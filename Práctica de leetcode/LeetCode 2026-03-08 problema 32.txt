@@ -1,0 +1,38 @@
+public class Solution {
+    public int LongestValidParentheses(string s) {
+        if(s == "") return 0;
+
+        // Almacena posiciones en una pila
+        Stack<int> positions = new Stack<int>();
+
+        for(int i = 0; i < s.Length; i++){
+            if(s[i] == '(') positions.Push(i);
+            else{
+                // Si se puede cerrar un paréntesis, se remueve la posición de la pila
+                if(positions.Any() && s[positions.Peek()] == '(')
+                    positions.Pop();
+                // Que no haya ( antes de ) significa que no es válido
+                else
+                    positions.Push(i);
+            }
+        }
+        
+        // Que la pila esté vacía significa que toda la cadena es válida
+        if(!positions.Any()) return s.Length;
+        
+        int length = s.Length, invalidAt = 0, result = 0;
+
+        while(positions.Count > 0){
+            invalidAt = positions.Pop();
+            // - 1 por compensación que se almacenan posiciones y no el tamaño
+            result = Math.Max(result, length - invalidAt - 1);
+            // invalidAt representa el elemento a la derecha de la siguiente subcadena válida a revisar
+            length = invalidAt;
+        }
+        
+        // Última prueba para comprobar la longitud
+        result = Math.Max(result, length);
+        
+        return result;
+    }
+}

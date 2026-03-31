@@ -1,0 +1,22 @@
+public class Solution {
+    public double MyPow(double x, int n) {
+        // Evita desbordamientos
+        long bigN = n;
+        
+        if(bigN == 0) return 1;
+        if(bigN < 0){
+            x = 1 / x;
+            bigN = -bigN;
+        }
+        
+        return Calculate(x, bigN);
+    }
+    private double Calculate(double x, long n){
+        if(n == 1) return x;
+        
+        // Reduce el tiempo de cálculo
+        double half = Calculate(x, n/2);
+        
+        return n % 2 == 0 ? half * half: half * half * x;
+    }
+}

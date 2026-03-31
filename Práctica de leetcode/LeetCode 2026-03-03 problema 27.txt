@@ -1,0 +1,44 @@
+public class Solution {
+    public int RemoveElement(int[] nums, int val) {
+        if(nums.Length == 0) return 0;
+        
+        int left = 0, right = nums.Length - 1;
+        int newAmount = 0;
+        
+        while(left <= right){
+            // Console.WriteLine($"Posiciones de left y right: {left}, {right}");
+            // if(nums[right] == val){
+            //     Console.WriteLine("Valor objetivo encontrado en right: " + nums[right]);
+            //     right--;
+            //     Console.WriteLine("Nuevo valor: " + nums[right]);
+            // } 
+            // else if(nums[left] == val && nums[right] != val){
+            //     Console.WriteLine("Valor objetivo encontrado en left: " + nums[left]);
+            //     //int temp = nums[left];
+            //     nums[left] = nums[right];
+            //     Console.WriteLine("Nuevo valor de left: " + nums[left]);
+            //     //nums[right] = temp;
+            //     newAmount++;
+            //     right--;
+            //     left++;
+            //     Console.WriteLine("Nuevo valor de right: " + nums[right]);
+            // }else if(nums[left] != val){
+            //     newAmount++;
+            //     left++;
+            // }
+            if(nums[left] == val && nums[right] != val){
+                nums[left] = nums[right];
+                right--; left++;
+                newAmount++;
+            }
+            else if(nums[left] != val){
+                left++; newAmount++;
+            }
+            else{
+                right--;
+            }
+        }
+        
+        return newAmount;
+    }
+}

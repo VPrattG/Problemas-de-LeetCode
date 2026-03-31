@@ -1,0 +1,55 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int val=0, ListNode next=null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode RotateRight(ListNode head, int k) {
+        // Casos donde no se puede rotar
+        if(head == null || k == 0) return head;
+        
+        int listLength = 1;
+        ListNode temp = head;
+        
+        // Evita rotaciones innecesarias
+        while(temp.next != null){
+            temp = temp.next;
+            listLength++;
+        }
+        
+        k %= listLength;
+        
+        if(k == 0) return head;
+
+        // La lista se convierte en una circular por conveniencia
+        temp.next = head;
+
+        ListNode last = FindNode(head, listLength - k);
+
+        // Se regresa a ser una lista simple
+        head = last.next;
+        last.next = null;
+
+        return head;
+    }
+    
+    // Función auxiliar para encontrar el nodo que estará al final
+    public ListNode FindNode(ListNode temp, int k){
+        int pos = 1;
+        
+        // Aunque la lista es circular, la condición existe por si acaso
+        while(temp != null){
+            if(pos == k) return temp;
+            pos++;
+            temp = temp.next;
+        }
+        
+        return temp;
+    }
+}

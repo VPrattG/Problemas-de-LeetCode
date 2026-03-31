@@ -1,0 +1,43 @@
+public class Solution {
+    public bool IsMatch(string s, string p) {
+        // starMark representa la última posición donde se encontró un asterisco
+        // es -1 porque no se garantiza que exista, y evita errores en el futuro
+        // matchIndex es la posición de i cuando se encontró la asterisco
+        int i = 0, j = 0, matchIndex = 0, starMark = -1;
+        int sL = s.Length, pL = p.Length;
+
+        while(i < sL){
+            // Caso normal: Comodín encontrado, o ambos caracteres coinciden
+            // Ambos punteros avanzan
+            if(j < pL && (p[j] == '?' || p[j] == s[i])){
+                i++; j++;
+            } 
+            // Caso donde se ve un asterisco
+            // Se establece un "punto de guardado", y solo se avanza j
+            else if(j < pL && p[j] == '*'){
+                starMark = j;
+                matchIndex = i;
+                j++;
+            } 
+            // Caso cuando no coinciden
+            // Se usa el asterisco para regresar a otro punto, y continuar revisando
+            else if(starMark != -1){
+                // Se "reinicia" el valor de j
+                j = starMark + 1;
+                // Se prueba de nuevo, pero con el siguiente caracter de i
+                matchIndex++;
+                i = matchIndex;
+            } 
+            // Si ya no queda nada más, significa que la cadena no coincide
+            else return false;
+        }
+        
+        // Para ignorar asteriscos a la derecha, que pueden coincidir con un valor vacío
+        while(j < pL && p[j] == '*'){
+            j++;
+        }
+
+        // Para aasegurar que no existan más valores después de los asteriscos
+        return j == pL;
+    }
+}

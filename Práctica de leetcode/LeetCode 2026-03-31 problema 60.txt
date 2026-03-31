@@ -1,0 +1,35 @@
+public class Solution {
+    public string GetPermutation(int n, int k) {
+        // Aprovecha la combinatoria para funcionar
+        List<int> nums = new List<int>();
+        int factorial = 1;
+        
+        // Calcular el factorial de n-1! ayuda a obtener la permutación k
+        // También agrega cada valor a una lista
+        for(int i = 1; i < n; i++){
+            factorial *= i;
+            nums.Add(i);
+        }
+        // Se agrega el último valor de la lista
+        nums.Add(n); 
+        // Para utilizar k en posiciones de la lista
+        k--;
+
+        StringBuilder sb = new StringBuilder();
+
+        while(nums.Count > 0){
+            int ind = k/factorial;
+            sb.Append(nums[ind]);
+            // Para no repetir el número
+            nums.RemoveAt(ind);
+            // Para evitar dividir entre 0 cuando se haya encontrado la permutación
+            if(nums.Count == 0) break;
+
+            // Procedimiento para obtener los siguientes números de la permutación K
+            k %= factorial;
+            factorial /= nums.Count;
+        }
+
+        return sb.ToString();
+    }
+}

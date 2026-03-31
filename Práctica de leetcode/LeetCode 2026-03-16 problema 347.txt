@@ -1,0 +1,30 @@
+public class Solution {
+    public int[] TopKFrequent(int[] nums, int k) {
+        // Método que utiliza BucketSort
+        Dictionary<int, int> frequencies = new Dictionary<int, int>();
+        
+        foreach(int num in nums){
+            if(!frequencies.ContainsKey(num)) frequencies[num] = 0;
+            frequencies[num]++;
+        }
+
+        // El + 1 sirve para ignorar la posición 0
+        List<int>[] bucketLists = new List<int>[nums.Length + 1];
+        for(int i = 0; i < bucketLists.Length; i++){
+            bucketLists[i] = new List<int>();
+        }
+        // var porque no tengo idea qué tipo de dato usar aquí
+        foreach(var pair in frequencies){
+            //Console.WriteLine(typeof(pair));
+            // Se agrega el número a su respectiva frecuencia
+            bucketLists[pair.Value].Add(pair.Key);
+        }
+
+        var elements = new List<int>();
+        for(int i = bucketLists.Length - 1; i >= 0 && elements.Count < k; i--){
+            elements.AddRange(bucketLists[i]);
+        }
+
+        return elements.Take(k).ToArray();
+    }
+}

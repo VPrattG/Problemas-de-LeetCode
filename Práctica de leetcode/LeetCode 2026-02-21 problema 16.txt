@@ -1,0 +1,36 @@
+public class Solution {
+    public int ThreeSumClosest(int[] nums, int target) {
+        // La primera suma es tiene el resultado más cercano en su momento
+        int closestSum = nums[0] + nums[1] + nums[2];
+        
+        Array.Sort(nums);
+        
+        for(int i = 0; i < nums.Length - 2; i++){
+            // En caso de que haya más de una instancia de un elemento
+            // Reduce el tiempo total de ejecución
+            if(i > 0 && nums[i] == nums[i - 1]) continue;
+            
+            // Punteros para la izquierda y derecha
+            int j = i + 1, k = nums.Length - 1;
+            
+            // Se realiza el ciclo de dos punteros
+            while(j < k){
+                // Se realiza la suma
+                int sum = nums[i] + nums[j] + nums[k];
+                                
+                // Si se encuentra el valor exacto, se concluye
+                if(sum == target) return sum;
+                
+                // Si se encuentra un valor más cercano al objetivo
+                if(Math.Abs(target - sum) < Math.Abs(target - closestSum))
+                    closestSum = sum;
+                // Si la suma es mayor al objetivo, reducir el valor más grande
+                else if(sum > target) k--;
+                // En caso contrario, aumentar el valor del valor medio
+                else j++;
+            }
+        }
+        
+        return closestSum;
+    }
+}

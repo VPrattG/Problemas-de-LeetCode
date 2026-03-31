@@ -1,0 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    int diameter = 0;
+    
+    public int DiameterOfBinaryTree(TreeNode root) {
+        CalculateDiameter(root);
+        
+        return diameter;
+    }
+    
+    public int CalculateDiameter(TreeNode root){
+        if(root == null) return 0;
+        
+        // Se usa post orden para navegar los nodos
+        int leftPath = CalculateDiameter(root.left);
+        int rightPath = CalculateDiameter(root.right);
+        
+        // Su función es más evidente cuando se llega a los nodos superiores del árbol
+        diameter = Math.Max(diameter, leftPath + rightPath);
+        
+        // Devuelve la ruta más larga actual
+        return Math.Max(leftPath, rightPath) + 1;
+    }
+}

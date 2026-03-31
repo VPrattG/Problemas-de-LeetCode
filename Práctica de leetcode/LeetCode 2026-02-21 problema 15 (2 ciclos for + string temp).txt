@@ -1,0 +1,23 @@
+public class Solution {
+    public string LongestCommonPrefix(string[] strs) {
+        if(strs == null || strs.Length == 0) return "";
+        
+        string first = strs[0];
+        
+        for(int i = 0; i < strs[0].Length; i++){
+            // Se obtiene el caracter actual a investigar    
+            char cur = first[i];
+            for(int j = 1; j < strs.Length; j++){
+                // Se obtiene la cadena actual
+                string temp = strs[j];
+		// Si la cadena no tiene una letra en la posición i
+		// O si no tiene la misma letra que se busca
+		// Se devuelve una subcadena que llega hasta el valor de i
+                if(i >= strs[j].Length || temp[i] != cur) return first.Substring(0, i);
+            }
+        }
+
+	// Por si todas las cadenas contienen el primer valor
+        return first;
+    }
+}

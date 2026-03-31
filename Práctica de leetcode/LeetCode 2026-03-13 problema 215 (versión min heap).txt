@@ -1,0 +1,19 @@
+public class Solution {
+    public int FindKthLargest(int[] nums, int k) {
+        // Versión con montículos binarios (heap)
+        // int, int indica el valor y su prioridad
+        PriorityQueue<int, int> minHeap = new PriorityQueue<int, int>();
+
+        foreach(int num in nums){
+            minHeap.Enqueue(num, num);
+            
+            if(minHeap.Count > k){
+                // Se elimina el elemento con la menor prioridad
+                minHeap.Dequeue();
+            }
+        }
+
+        // La raíz contiene el k elemento más grande
+        return minHeap.Peek();
+    }
+}

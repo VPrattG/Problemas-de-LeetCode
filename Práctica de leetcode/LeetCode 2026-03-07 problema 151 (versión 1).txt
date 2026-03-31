@@ -1,0 +1,31 @@
+public class Solution {
+    public string ReverseWords(string s) {
+        // Versión sin trim, split o reverse usando una pila
+        StringBuilder sb = new StringBuilder();
+        Stack<string> stack = new Stack<string>();
+
+        foreach(char c in s){
+            if(c == ' ' && sb.Length > 0){
+                stack.Push(sb.ToString());
+                sb.Clear();
+            }
+            else if( c != ' '){
+                sb.Append(c);
+            }
+        }
+
+        // Asegura que la última palabra sea ingresada
+        if(sb.Length > 0) {
+            stack.Push(sb.ToString());
+            sb.Clear();
+        }
+
+        while(stack.Count > 0){
+            sb.Append(stack.Pop());
+            // Para no agregar un espacio al final
+            if(stack.Count > 0) sb.Append(" ");
+        }
+
+        return sb.ToString();
+    }
+}

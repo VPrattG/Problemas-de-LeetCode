@@ -1,0 +1,11 @@
+public class Solution {
+    public int FindMaxConsecutiveOnes(int[] nums) {
+        int max = 0, count = 0;
+        foreach(int num in nums){
+            // Se aumenta la cantidad seguida actual o se reinicia, según sea 1 o 0
+            count = (num == 1) ? count + 1 : 0;
+            max = Math.Max(max, count);
+        }
+        return max;
+    }
+}

@@ -1,0 +1,40 @@
+public class Solution {
+    public IList<IList<int>> PermuteUnique(int[] nums) {
+        IList<IList<int>> result = new List<IList<int>>();
+        Dictionary<int, int> amount = new Dictionary<int, int>();
+
+        foreach(int num in nums){
+            if(!amount.ContainsKey(num)) amount[num] = 0;
+            amount[num]++;
+        }
+
+        IList<int> permutation = new List<int>();
+        Backtracking(nums, result, amount, permutation);
+
+        return result;
+    }
+
+    private void Backtracking(int[] nums, IList<IList<int>> result, Dictionary<int, int> amount, IList<int> permutation){
+        if(permutation.Count == nums.Length){
+            result.Add(new List<int>(permutation));
+            return;
+        }
+
+        // Evita usar el mismo número como inicio de permutaciones si hay más de uno en el arreglo
+        foreach(var pair in amount){
+            int key = pair.Key;
+            int value = pair.Value;
+            
+            if(value == 0) continue;
+            
+            permutation.Add(key);
+            amount[key]--;
+            
+            Backtracking(nums, result, amount, permutation);
+            
+            // Práctica normal de vuelta atrás
+            permutation.RemoveAt(permutation.Count - 1);
+            amount[key]++;
+        }
+    }
+}

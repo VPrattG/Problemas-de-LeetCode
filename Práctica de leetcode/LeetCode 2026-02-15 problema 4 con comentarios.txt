@@ -1,0 +1,84 @@
+public double FindMedianSortedArrays(int[] nums1, int[] nums2) {
+        int l1 = nums1.Length, l2 = nums2.Length;
+        
+        // Se invierte el orden de los arreglos si el segundo es más grande
+        if(l1 < l2) return FindMedianSortedArrays(nums2, nums1);
+        
+        // Casos donde uno de los arreglos esté vacío
+        if(nums1.Length == 0) 
+            return l2 % 2 == 0 ? nums2[l2/2] : (nums2[l2 - 1 / 2] + nums2[l2/2]) / 2;
+        if(nums2.Length == 0) 
+            return l1 % 2 == 0 ? nums2[l1/2] : (nums2[l1 - 1 / 2] + nums2[l1/2]) / 2;
+
+        int length = l1 + l2;
+
+        // Permite obtener la mitad aunque el arreglo tenga una cantidad par o impar de valores
+        // Por ejemplo: Si los arreglos combinados tienen una longitud de 20, la mitad será 10
+        int half = (length + 1) / 2;
+        int low = 0;
+        int high = length;
+
+        // Inicio de búsqueda binaria
+        while(low <= high) {
+            // El corte hecho en el primer arreglo, como si ya estuviera combinado con el segundo
+            // Almacena la primera mitad, y una porción de la segunda mitad
+            // Si este arreglo mide 14, el corte tendrá un valor de 10
+            int cut1 = low + (high - low) / 2;
+            // El corte hecho en el segundo arreglo, conteniendo lo restante de la segunda mitad
+            // del arreglo combinado
+            // Si este arreglo mide 6, el corte tendrá un valor de 0
+            int cut2 = half - cut1;
+
+            // Asignación de valores
+            // Se usa cutN - 1 y cutN para los números a la izquierda y derecha del corte hecho
+            // MinValue y MaxValue se usan para respetar las reglar indicadas, en caso de que el corte
+            // se encuentre al inicio o al final del arreglo
+
+            // El valor más grande antes del corte en el arreglo 1
+            int maxL1 = (cut1 == 0) ? Int32.MinValue : nums1[cut1 - 1];
+            // El valor más pequeño después del corte en el arreglo 2
+            int minR1 = (cut1 == l1) ? Int32.MaxValue : nums1[cut1];
+            
+            // El valor más grande antes del corte en el arreglo 2
+            int maxL2 = (cut2 == 0) ? Int32.MinValue : nums2[cut2 - 1];
+            // El valor más pequeño después del corte en el arreglo 1
+            int minR2 = (cut2 == l2) ? Int32.MaxValue : nums2[cut2];
+
+            // Asegura que el mayor valor de la primera mitad de nums1 no sea mayor que el menor valor
+            // de la segunda mitad de nums2
+            // Y que el mayor valor de la primera mitad de nums2 no sea mayor que el menor de la
+            // segunda mitad de nums1
+            // TL;DR: Comprueba que todo en la parte izquierda sea menor que lo de la parte derecha
+            if(maxL1 <= minR2 && maxL2 <= minR1){
+                // En caso de que la cantidad de elementos sea par
+                if(length % 2 == 0){
+                    // Realiza el promedio de los valores de la mitad
+                    // Usa el mayor valor existente en la parte izquierda de ambos arreglos
+                    // Y el menor valor existente en la parte derecha de ambos arreglos
+                    // Es importante dividir entre 2.0
+                    // Si se divide entre 2, ignora los decimales resultantes
+                    return (Math.Max(maxL1, maxL2) + Math.Min(minR1, minR2)) / 2.0;
+                }
+                // En caso de que sea impar
+                else
+                    // Se devuelve el valor que está en la mitad
+                    // Al ser la parte izquierda la más grande de las dos, solo se devuelve el valor
+                    // más grande entre las dos mitades
+                    return Convert.ToDouble(Math.Max(maxL1, maxL2));
+            }
+            // En caso de que uno de los elementos rompa la regla descrita previamente
+            else if(maxL1 > minR2){
+                // Si nums1 tiene un número demasiado grande, se "desplaza" a la parte derecha del
+                // arreglo combinado
+                // Esto se logra reduciendo el tamaño del primer corte
+                high = cut1 - 1;
+            }
+            else{
+                // Si nums2 tiene un elemento demasiado grande, se "desplaza" a la parte izquierda del
+                // arreglo combinado
+                // Esto se logra aumentando el tamaño del primer corte
+                low = cut1 + 1;
+            }
+        }
+        return 0;
+    }

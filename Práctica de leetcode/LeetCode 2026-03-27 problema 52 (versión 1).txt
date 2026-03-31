@@ -1,0 +1,32 @@
+public class Solution {
+    // Versión que usa ref int con un void
+    public int TotalNQueens(int n) {
+        int validBoards = 0;
+        
+        bool[] rows = new bool[n];
+        bool[] rightDiag = new bool[2*n];
+        bool[] leftDiag = new bool[2*n];
+
+        AuxBacktracking(0, n, ref validBoards, rows, rightDiag, leftDiag);
+
+        return validBoards;
+    }
+
+    private void AuxBacktracking(int col, int n, ref int validBoards, bool[] rows,
+     bool[] rightDiag, bool[] leftDiag){
+        // En caso de encontrar un tablero válido
+        if(col == n) validBoards++;
+
+        for(int row = 0; row < n; row++){
+            int i = row + col;
+            int j = row - col + n;
+
+            // Si ya hay una reina en la fila, o las diagonales
+            if(rows[row] || rightDiag[i] || leftDiag[j]) continue;
+
+            rows[row] = rightDiag[i] = leftDiag[j] = true;
+            AuxBacktracking(col + 1, n, ref validBoards, rows, rightDiag, leftDiag);
+            rows[row] = rightDiag[i] = leftDiag[j] = false;
+        }
+    }
+}

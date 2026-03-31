@@ -1,0 +1,40 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int val=0, ListNode next=null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode MergeTwoLists(ListNode list1, ListNode list2) {
+        // Inicio de la lista combinada
+        ListNode head = new ListNode();
+        // last permite navegar a través de la lista sin problemas
+        var last = head;
+        
+        // El ciclo solo seguirá hasta que una de las listas se acabe
+        while(list1 != null && list2 != null){
+            // Se revisa cuál valor es mayor
+            // El menor se adjunta a last, y se recorre el nodo
+            if(list1.val < list2.val){
+                last.next = list1;
+                list1 = list1.next;
+            } else{
+                last.next = list2;
+                list2 = list2.next;
+            }
+            // Para agregar el siguiente valor
+            last = last.next;
+        }
+        
+        // Se revisa qué lista está vacía para agregar los nodos restantes de la otra
+        last.next = list1 == null? list2 : list1;
+
+        // El valor inicial de head es no es parte de la lista, así que se usa head.next
+        return head.next;
+    }
+}

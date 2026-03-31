@@ -1,0 +1,16 @@
+public class Solution {
+    public int StrStr(string haystack, string needle) {
+        if(haystack == needle) return 0;
+        if(needle.Length > haystack.Length) return -1;
+
+        int left = 0, right = needle.Length - 1;
+        while(right < haystack.Length){
+            // Explora cada rango de longitud needle.Length
+            if(haystack.Substring(left, right - left + 1) == needle)
+                return left;
+            left++; right++;
+        }
+
+        return -1;
+    }
+}

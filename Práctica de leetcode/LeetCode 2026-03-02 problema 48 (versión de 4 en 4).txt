@@ -1,0 +1,22 @@
+public class Solution {
+    public void Rotate(int[][] matrix) {
+        // Versión que rota de poco en poco
+        int n = matrix.Length;
+        // Como se cambia entre esquinas, solo se necesita iterar a través de la mitad
+        // del tamaño, tanto en filas como columnas
+        for(int i = 0; i < (n + 1) / 2; i++){
+            for(int j = 0; j < n / 2; j++){
+                // Valor de abajo-izquierda
+                int temp = matrix[n - 1 - j][i];
+                // Abajo-derecha pasa a abajo-izquierda
+                matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j];
+                // Arriba-derecha pasa a abajo-derecha
+                matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];
+                // Arriba-izquierda pasa a arriba-derecha
+                matrix[j][n - 1 - i] = matrix[i][j];
+                // temp pasa a arriba-izquierda
+                matrix[i][j] = temp;
+            }
+        }
+    }
+}

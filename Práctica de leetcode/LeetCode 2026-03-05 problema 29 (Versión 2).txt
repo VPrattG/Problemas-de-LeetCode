@@ -1,0 +1,34 @@
+public class Solution {
+    public int Divide(int dividend, int divisor) {
+        // Casos para reducir tiempo de ejecución
+        if(dividend == int.MinValue && divisor == -1) 
+            return int.MaxValue;
+        if(divisor == 1) return dividend;
+        if(divisor == -1) return -dividend;
+
+        int quotient = 0;
+        int negDividend = (dividend < 0 ? -1 : 1);
+        int negDivisor = (divisor < 0 ? -1 : 1);
+        
+        // Evita desbordamiento de datos
+        long absDividend = Math.Abs((long)dividend);
+        long absDivisor = Math.Abs((long)divisor);
+        
+        while(absDividend >= absDivisor){
+            long temp = absDivisor;
+            int numDivisors = 1;
+            
+            // Se reduce el tiempo de ejecución duplicando el valor del divisor
+            // cada vez que se realiza la división
+            while(absDividend >= temp + temp){
+                temp += temp;
+                numDivisors += numDivisors;
+            }
+            
+            absDividend -= temp;
+            quotient += numDivisors;
+        }
+        
+        return quotient * negDividend * negDivisor;
+    }
+}

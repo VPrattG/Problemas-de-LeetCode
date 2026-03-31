@@ -1,0 +1,14 @@
+public class Solution {
+    public int BitwiseComplement(int n) {
+        if(n == 0) return 1;
+        
+        string binary = Convert.ToString(n, 2);
+        string reverse = "";
+
+        foreach(char c in binary){
+            reverse += (c == '1' ? 0 : 1);
+        }
+
+        return Convert.ToInt32(reverse, 2);
+    }
+}

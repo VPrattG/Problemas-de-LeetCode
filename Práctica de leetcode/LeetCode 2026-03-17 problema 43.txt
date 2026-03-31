@@ -1,0 +1,26 @@
+public class Solution {
+    public string Multiply(string num1, string num2) {
+        if(num1 == "0" || num2 == "0") return "0";
+
+        int[] value = new int[num1.Length + num2.Length];
+
+        for(int i = num1.Length - 1; i >= 0 ; i--){
+            for(int j = num2.Length - 1; j >= 0; j--){
+                int mult = (num1[i] - '0') * (num2[j] - '0');
+                // Para incluir el acarreo del valor anterior
+                int sum = mult + value[i + j + 1];
+                value[i + j + 1] = sum % 10;
+                // Se agrega el acarreo de la suma actual
+                value[i + j] += sum / 10;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        // Para agregar los valores, ignorando ceros a la izquierda
+        foreach(int num in value){
+            if(!(sb.Length == 0 && num == 0)) sb.Append(num);
+        }
+
+        return sb.ToString();
+    }
+}

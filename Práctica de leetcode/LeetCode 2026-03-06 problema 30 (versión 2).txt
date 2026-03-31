@@ -1,0 +1,68 @@
+public class Solution {
+    public IList<int> FindSubstring(string s, string[] words) {
+        IList<int> positions = new List<int>();
+        if(s.Length == 0 || words.Length == 0) return positions;
+        
+        int wordSize = words[0].Length;
+        int searchedLength = wordSize * words.Length;
+        //int wordAmount = words.Length;
+        
+        if(searchedLength > s.Length) return positions;
+        
+        Dictionary<string, int> wordTotal = new Dictionary<string, int>();
+        
+        foreach(string word in words){
+            if(!wordTotal.ContainsKey(word))
+                wordTotal[word] = 0;
+            wordTotal[word]++;
+        }
+        
+        // Busca inicios de palabras en 0 + wordSize, 1 + wordSize, ..., etc
+        for(int i = 0; i < wordSize; i++){
+            // Palabras encontradas actualmente en diccionario e int
+            Dictionary<string, int> currentWords = new Dictionary<string, int>();
+            int foundWords = 0;
+            int leftIndex = i;
+
+            // Se desplaza de palabra en palabra
+            for(int j = i; j <= s.Length - wordSize; j += wordSize){
+                string currentWord = s.Substring(j, wordSize);
+
+                // Revisa si la palabra es válida
+                if(wordTotal.ContainsKey(currentWord)){
+                    if(!currentWords.ContainsKey(currentWord))
+                        currentWords[currentWord] = 0;
+                    currentWords[currentWord]++;
+                    foundWords++;
+
+                    // Desplaza la ventana a la derecha en caso de que la cantidad de palabras sea más del máximo
+                    // Evita agregar casos incorrectos a la lista
+                    while(currentWords[currentWord] > wordTotal[currentWord]){
+                        string leftWord = s.Substring(leftIndex, wordSize);
+                        currentWords[leftWord]--;
+                        foundWords--;
+                        leftIndex += wordSize;
+                    }
+
+                    // Tanto en el while como if se remueve la palabra actual
+                    // porque las que se añadieron pueden cumplir con otra respuesta
+                    if(foundWords == words.Length){
+                        positions.Add(leftIndex);
+                        string leftWord = s.Substring(leftIndex, wordSize);
+                        currentWords[leftWord]--;
+                        foundWords--;
+                        leftIndex += wordSize;
+                    }
+                }
+                // Si la palabra no está en nums, se continúa desde cero con la siguiente palabra
+                else{
+                    currentWords.Clear();
+                    foundWords = 0;
+                    leftIndex = j + wordSize;
+                }
+            }
+        }
+        
+        return positions;
+    }
+}

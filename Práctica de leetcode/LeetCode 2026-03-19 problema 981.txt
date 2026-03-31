@@ -1,0 +1,37 @@
+public class TimeMap {
+    // Como indica su nombre, SortedList almacena datos de manera ordenada
+    private readonly Dictionary<string, SortedList<int, string>> dic;
+    public TimeMap() {
+        dic = new Dictionary<string, SortedList<int, string>>();
+    }
+    
+    public void Set(string key, string value, int timestamp) {
+        if(!dic.ContainsKey(key)){
+            dic[key] = new SortedList<int, string>();
+        }
+        // Este Add se refiere al método de SortedList, no algo del diccionario
+        dic[key].Add(timestamp, value);
+    }
+    
+    public string Get(string key, int timestamp) {
+        if(!dic.ContainsKey(key)) return "";
+        
+        SortedList<int, string> sorLis = dic[key];
+        
+        // Revisión de derecha a izquierda porque pide el valor próximo en caso de no existir
+        // la marca de tiempo actual
+        for(int i = sorLis.Count - 1; i >= 0; i--){
+            // SortedList permite acceder a las llaves y los valores como propiedades
+            if(sorLis.Keys[i] <= timestamp) return sorLis.Values[i];
+        }
+
+        return "";
+    }
+}
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap obj = new TimeMap();
+ * obj.Set(key,value,timestamp);
+ * string param_2 = obj.Get(key,timestamp);
+ */

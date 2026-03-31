@@ -1,0 +1,31 @@
+public class Solution {
+    public IList<IList<int>> CombinationSum(int[] candidates, int target) {
+        IList<IList<int>> answers = new List<IList<int>>();
+        // Para no crear un temp cada vez
+        IList<int> current = new List<int>();
+        
+        AuxBacktracking(0, target, candidates, current, answers);
+        
+        return answers;
+    }
+
+    public void AuxBacktracking(int index, int target, int[] candidates, 
+        IList<int> current, IList<IList<int>> answers){
+            // Para añadir la combinación a la lista
+            if(target == 0){
+                answers.Add(new List<int>(current));
+                // answers.Add(current);
+                return;
+            }
+
+            for(int i = index; i < candidates.Length; i++){
+                if(candidates[i] <= target){
+                    current.Add(candidates[i]);
+                    // i se queda igual porque las combinaciones permiten repetir valores
+                    // target reduce su valor por considerarse el nuevo elemento en la combinación
+                    AuxBacktracking(i, target - candidates[i], candidates, current, answers);
+                    current.RemoveAt(current.Count - 1);
+                }
+            }
+    }
+}

@@ -1,0 +1,43 @@
+public class Solution {
+    public void SolveSudoku(char[][] board) {
+        SudokuSolver(board);
+    }
+
+    public bool SudokuSolver(char[][] board){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                // Para ignorar números establecidos
+                if(board[i][j] == '.'){
+                    for(char c = '1'; c <= '9'; c++){
+                        if(ValidSudoku(board, i, j, c)){
+                            // Se prueba el resto del sudoku con el nuevo dígito
+                            board[i][j] = c;
+                            if(SudokuSolver(board)) return true;
+                            // Para volver a intentar, si no funciona
+                            board[i][j] = '.';
+                        }
+                    }
+                    // Si se llega aquí, es por que no había un dígito válido
+                    return false;
+                }
+            }
+        }
+        // Se llega a esta parte una vez que el sudoku ha sido resuelto
+        return true;
+    }
+
+    public bool ValidSudoku(char[][] board, int row, int col, char num){
+        for(int i = 0; i < 9; i++){
+            // Para revisar cada fila y columna
+            if(board[row][i] == num) return false;
+            if(board[i][col] == num) return false;
+            // Para revisar cada celda en un 3x3
+            // row / 3 y col / 3 permiten redondear a 0, 1 y 2
+            // El 3 * permite ubicar qué 3x3 se utiliza
+            int squareRow = 3 * (row / 3) + i / 3;
+            int squareCol = 3 * (col / 3) + i % 3;
+            if(board[squareRow][squareCol] == num) return false;
+        }
+        return true;
+    }
+}

@@ -1,0 +1,42 @@
+public class Solution {
+    public bool IsMatch(string s, string p) {
+        // Versión recursiva que viaja de derecha a izquierda
+        // No considera \, +, etc porque no los pide LeetCode
+        return IsMatchAux(s, p, s.Length - 1, p.Length - 1);
+    }
+
+    public bool IsMatchAux(string s, string p, int i, int j){
+        // Si ambos punteros llegaron al límite, significa que todo coincidió en el Regex
+        if(i == -1 && j == -1) return true;
+        // Si ambos punteros aún están en el rango de las cadenas s y p, se sigue revisando
+        else if(i>=0 && j>=0){
+            // Se asignan los caracteres a comparar
+            char sC = s[i], pC = p[j];
+            // Si no es un asterisco, se revisa si p[j] es un . (comodín) o si vale lo mismo que s[i]
+            // y que los caracteres posteriores cumplan con sus requisitos debidos
+            if(pC != '*') return (pC == '.' || pC == sC) && IsMatchAux(s, p, i - 1, j - 1);
+            // En caso de que p[i] sea un asterisco
+            else{
+                // Se obtiene el caracter que indica el asterisco (cero o más veces)
+                char prevP = p[j - 1];
+                // Si hay 0 veces
+                // El - 2 es para ignorar el caracter
+                if(prevP != '.' && prevP != sC) return IsMatchAux(s, p, i, j - 2);
+                // Por si hay uno, múltiples, o cero caracteres
+                else return IsMatchAux(s, p, i - 1, j - 2) || IsMatchAux(s, p, i - 1, j) 
+                || IsMatchAux(s, p, i, j - 2);
+            }
+        }
+        // Si se llegó al fin de la cadena s, pero no la de j
+        else if(i == -1){
+            // Se revisa el valor de p[j]
+            // Si es un asterisco, significa que no se incluyó en la cadena s
+            // Se revisa la existencia de más caracteres con asterisco
+            if(p[j] == '*') return IsMatchAux(s, p, i, j - 2);
+        }
+
+        // Por si los caracteres específicos no coinciden
+        // O si solo el puntero j llegó a -1
+        return false;
+    }
+}

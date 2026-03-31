@@ -1,0 +1,48 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    // Clase auxiliar para utilizar una cola con nodos y profundidad
+    public class AuxNode{
+        public TreeNode Node {get;}
+        public int Depth {get;}
+        public AuxNode(TreeNode node, int depth){
+            Node = node;
+            Depth = depth;
+        }
+    }
+    public int MinDepth(TreeNode root) {
+        // Versión iterativa mediante BFS
+        if(root == null) return 0;
+
+        Queue<AuxNode> nodes = new Queue<AuxNode>();
+        nodes.Enqueue(new AuxNode(root, 1));
+
+        while(nodes.Count != 0){
+            AuxNode cur = nodes.Dequeue();
+            TreeNode curNode = cur.Node;
+            int depth = cur.Depth;
+            
+            // Para interrumpir la ejecución al encontrar el primer nodo hoja
+            if(curNode.left == null && curNode.right == null){
+                return depth;
+            }
+            
+            if(curNode.left != null) nodes.Enqueue(new AuxNode(curNode.left, depth + 1));
+            if(curNode.right != null) nodes.Enqueue(new AuxNode(curNode.right, depth + 1));
+        }
+
+        // No debería ser posible llegar a este punto, pero por si acaso
+        return -1;
+    }
+}
