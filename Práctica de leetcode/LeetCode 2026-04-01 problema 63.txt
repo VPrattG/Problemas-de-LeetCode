@@ -1,0 +1,27 @@
+public class Solution {
+    public int UniquePathsWithObstacles(int[][] obstacleGrid) {
+        // Versión con programación dinámica
+        int m = obstacleGrid.Length;
+        int n = obstacleGrid[0].Length;
+
+        int[] prev = new int[n];
+        int[] curr = new int[n];
+
+        // Se garantiza que la casilla final tenga una manera de llegar
+        prev[0] = 1;
+
+        // En este caso, se revisan todas las filas
+        for(int i = 0; i < m; i++){
+            // Revisión de la nueva fila
+            curr[0] = obstacleGrid[i][0] == 1 ? 0 : prev[0];
+            for(int j = 1; j < n; j++){
+                curr[j] = obstacleGrid[i][j] == 1 ? 0 : curr[j - 1] + prev[j];
+            }
+            // Para utilizar la fila como referencia para la siguiente iteración
+            Array.Copy(curr, prev, n);
+        }
+        
+        // Representa la posición inicial del problema
+        return prev[n - 1];
+    }
+}

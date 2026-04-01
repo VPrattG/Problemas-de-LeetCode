@@ -1,0 +1,18 @@
+public class Solution {
+    public int UniquePaths(int m, int n) {
+        // Uso de programación dinámica
+        // Cada casilla depende de las siguientes para calcular su resultado
+        // Se aprovecha DP para reducir el tiempo de ejecución
+        int[] dp = new int[n];
+        // La primera fila solo tiene una manera para llegar
+        for(int i = 0; i < n; i++) dp[i] = 1;
+        // Para las demás filas
+        for(int i = 1; i < m; i++){
+            // Se suma el valor de las casillas anteriores
+            for(int j = 1; j < n; j++){
+                dp[j] += dp[j - 1];
+            }
+        }
+        return dp[n - 1];
+    }
+}
