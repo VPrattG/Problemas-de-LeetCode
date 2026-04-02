@@ -1,0 +1,39 @@
+public class Solution {
+    public bool IsNumber(string s) {
+        int i = 0;
+        bool number = false;
+        bool isDecimal = false;
+        bool isE = false;
+        
+        if(s[0] == '-' || s[0] == '+' ) i++;
+        if(s[0] == '.'){
+            isDecimal = true;
+            i++;
+        }
+          
+        // if(i == s.Length) return false;
+
+        while(i < s.Length){
+            char ch = s[i];
+            //Console.WriteLine(ch);
+            if(ch >= '0' && ch <= '9') number = true;
+            else if(ch == '.'){
+                if(isDecimal || isE) return false;
+                isDecimal = true;
+            }
+            else if((ch == 'E' || ch == 'e')){
+                if(isE || !number) return false;
+                isE = true;
+                number = false;
+            }
+            else if(ch == '+' || ch == '-'){
+                if(s[i - 1] != 'e' && s[i - 1] != 'E') return false;
+            }
+            else return false;
+            i++;
+        }
+        
+        return number;
+    }
+}
+

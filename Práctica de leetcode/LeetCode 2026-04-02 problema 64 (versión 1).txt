@@ -1,0 +1,27 @@
+public class Solution {
+    public int MinPathSum(int[][] grid) {
+        int m = grid.Length, n = grid[0].Length;
+
+        int[] prev = new int[n];
+        int[] curr = new int[n];
+        
+        // La primera fila, solo tiene una opción para avanzar
+        prev[0] = grid[0][0];
+        for(int i = 1; i < n; i++){
+            prev[i] = grid[0][i] + prev[i - 1];
+        } 
+
+        for(int i = 1; i < m; i++){
+            // Solo se puede acceder a la primer casilla si el robot viaja hacia abajo
+            curr[0] = grid[i][0] + prev[0];
+            for(int j = 1; j < n; j++){
+                // El robot decide si llega por arriba o la izquierda, dependiendo de cuál tenga menor valor
+                curr[j] = grid[i][j] + Math.Min(curr[j - 1], prev[j]);
+            }
+            // Para revisar la siguiente fila
+            Array.Copy(curr, prev, n);
+        }
+        
+        return prev[n - 1];
+    }
+}

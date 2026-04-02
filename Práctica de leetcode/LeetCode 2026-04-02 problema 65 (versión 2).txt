@@ -1,0 +1,7 @@
+using System.Text.RegularExpressions;
+public class Solution {
+    public bool IsNumber(string s) {
+        // Versión con una línea que aprovecha Regex
+        return Regex.IsMatch(s, "^[+-]?(\\d+\\.?\\d*|\\.\\d+)([eE][+-]?\\d+)?$");
+    }
+}
