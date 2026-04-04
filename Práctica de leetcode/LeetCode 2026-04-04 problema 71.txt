@@ -1,0 +1,32 @@
+public class Solution {
+    public string SimplifyPath(string path) {
+        Stack<string> stack = new Stack<string>();
+        
+        string[] components = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        
+        foreach(string component in components){
+            // Aunque C# permite omitir llaves si el bloque consiste de una sola línea
+            // Un if anidado dentro de otro debe contenerse con llaves
+            // Si no, se consideran dos if separados
+            switch(component){
+                case ".":
+                    break;
+                case "..":
+                    if(stack.Count > 0) stack.Pop();
+                    break;
+                default:
+                    stack.Push(component);
+                    break;
+            }
+        }
+        
+        StringBuilder sb = new StringBuilder();
+
+        while(stack.Count > 0){
+            sb.Insert(0, stack.Pop());
+            sb.Insert(0, '/');
+        }
+
+        return sb.Length == 0 ? "/" : sb.ToString();
+    }
+}

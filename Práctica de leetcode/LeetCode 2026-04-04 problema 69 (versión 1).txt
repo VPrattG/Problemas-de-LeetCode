@@ -1,0 +1,21 @@
+public class Solution {
+    public int MySqrt(int x) {
+        // Búsqueda binaria
+        if(x < 2) return x;
+        
+        int left = 1, right = x / 2;
+        
+        while(left <= right){
+            long mid = left + (right - left) / 2;
+            long square = mid * mid;
+            if(square == x) 
+                return (int)mid;
+            else if(square < x) 
+                left = (int)mid + 1;
+            else 
+                right = (int)mid - 1;
+        }
+
+        return right;
+    }
+}
