@@ -1,0 +1,25 @@
+public class Solution {
+    public bool JudgeCircle(string moves) {
+        int i = 0, j = 0;
+        foreach(char move in moves){
+            switch(move){
+                case 'U':
+                    i++;
+                    break;
+                case 'D':
+                    i--;
+                    break;
+                case 'L':
+                    j--;
+                    break;
+                case 'R':
+                    j++;
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        }
+        return i == 0 && j == 0;
+    }
+}

@@ -1,0 +1,31 @@
+public class Solution {
+    public int MinDistance(string word1, string word2) {
+        int m = word1.Length, n = word2.Length;
+        int[] prev = new int[n + 1];
+        
+        // Se llena con cambios predeterminados
+        // Por si word1 es una cadena vacía
+        for(int j = 0; j <= n; j++) prev[j] = j;
+        
+        for(int i = 0; i < m; i++){
+            int[] curr = new int[n + 1];
+            
+            // Para cuando word2 es una cadena vacía
+            // Se considera como si se realizó un cambio
+            curr[0] = i + 1;
+            
+            for(int j = 0; j < n; j++){
+                // Si los caracteres coinciden
+                if(word1[i] == word2[j])
+                    curr[j + 1] = Math.Min(prev[j], Math.Min(prev[j + 1], curr[j]) + 1);
+                // Se revisa qué acción causa menos cambios
+                // Insertar una letra, eliminar una letra, o cambiar de letra
+                else
+                    curr[j + 1] = Math.Min(prev[j], Math.Min(prev[j + 1], curr[j])) + 1;
+            }
+            
+            prev = curr;
+        }
+        return prev[n];
+    }
+}
