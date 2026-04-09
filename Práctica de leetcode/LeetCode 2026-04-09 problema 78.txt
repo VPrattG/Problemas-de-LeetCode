@@ -1,0 +1,21 @@
+public class Solution {
+    public IList<IList<int>> Subsets(int[] nums) {
+        IList<IList<int>> result = new List<IList<int>>();
+        List<int> subset = new List<int>();
+        
+        CreateSubsets(nums, 0, result, subset);
+        
+        return result;
+    }
+    public void CreateSubsets(int[] nums, int start, IList<IList<int>> result, List<int> subset){
+        // No necesita condición porque busca todas las posibilidades
+        result.Add(new List<int>(subset));
+        
+        // Ciclo estándar para vuelta atrás
+        for(int i = start; i < nums.Length; i++){
+            subset.Add(nums[i]);
+            CreateSubsets(nums, i + 1, result, subset);
+            subset.RemoveAt(subset.Count - 1);
+        }
+    }
+}
