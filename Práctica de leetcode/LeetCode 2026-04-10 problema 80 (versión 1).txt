@@ -1,0 +1,19 @@
+public class Solution {
+    public int RemoveDuplicates(int[] nums) {
+        if(nums.Length <= 2) return nums.Length;
+
+        // Se inicia en 2 porque los valores se pueden repetir una vez
+        int count = 2;
+
+        for(int i = 2; i < nums.Length; i++){
+            // Esta condición revisa si el valor existe 3 veces en el arreglo
+            if(nums[i] != nums[count - 2]){
+                // Se intercambian los valores actuales
+                nums[count] = nums[i];
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
