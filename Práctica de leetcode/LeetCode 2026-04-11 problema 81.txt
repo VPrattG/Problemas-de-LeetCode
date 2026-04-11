@@ -1,0 +1,34 @@
+public class Solution {
+    public bool Search(int[] nums, int target) {
+        int start = 0, end = nums.Length - 1;
+
+        while(start <= end){
+            // Evita desbordamiento de datos
+            int mid = start + (end - start) / 2;
+            
+            if(nums[mid] == target) return true;
+            
+            // Para saber si el pivote está antes o después de la mitad
+            if(nums[start] < nums[mid]){
+                // El pivote puede ser pequeño, y target estar en la derecha
+                if(nums[start] <= target && target < nums[mid])
+                    end = mid - 1;
+                else
+                    start = mid + 1;
+            } else if(nums[mid] < nums[start]){
+                // Decide entre usar la derecha del pivote, o la parte menos afectada
+                // según el valor de target
+                if(nums[mid] < target && target <= nums[end]) 
+                    start = mid + 1;
+                else
+                    end = mid - 1;
+            } else{
+                // Para ignorar duplicados, se incrementa el valor en la izquierda
+                start++;
+            }
+        }
+
+        // Para cuando no se encuentre el objetivo
+        return false;
+    }
+}
