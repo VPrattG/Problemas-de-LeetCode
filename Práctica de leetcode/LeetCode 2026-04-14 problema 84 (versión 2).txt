@@ -1,0 +1,25 @@
+public class Solution {
+    public int LargestRectangleArea(int[] heights) {
+        int n = heights.Length;
+        Stack<int> stack = new Stack<int>();
+        int largestArea = 0;
+
+        // Se revisa la condición i == n para que todas las barras sean usadas
+        for(int i = 0; i <= n; i++){
+            while(stack.Count > 0 && (i == n || heights[stack.Peek()] >= heights[i])){
+                int height = heights[stack.Pop()];
+                // i representa la posición de la derecha del rectángulo
+                // stack.Peek es el primer valor más chico que i desde la izquierda
+                // El -1 es porque se revisa el valor de la posición anterior
+                // Si no existe ningún valor más chico que i, entonces solo se usa i
+                int width = stack.Count <= 0 ? i : i - stack.Peek() - 1;
+                largestArea = Math.Max(largestArea, height * width);
+            }
+            
+            // Se agrega a la pila para las siguientes revisiones
+            stack.Push(i);
+        }
+
+        return largestArea;
+    }
+}
