@@ -1,0 +1,30 @@
+public class Solution {
+    public int MaximalRectangle(char[][] matrix) {
+        int m = matrix.Length, n = matrix[0].Length;
+        // Representa la altura de 1s seguidos en cada columna
+        int[] straightOnes = new int[n];
+        int maxArea = 0;
+
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                // Cuenta los 1s consecutivos
+                straightOnes[j] = matrix[i][j] == '1' ? straightOnes[j] + 1 : 0;
+            }
+
+            Stack<int> stack = new Stack<int>();
+            for(int j = 0; j <= n; j++){
+                // La condición donde j == n es para que todas las columnas se usen
+                int h = j == n ? 0 : straightOnes[j];
+                while(stack.Count > 0 && h < straightOnes[stack.Peek()]){
+                    int height = straightOnes[stack.Pop()];
+                    // Es como la solución en el problema 84
+                    int width = stack.Count <= 0 ? j : j - stack.Peek() - 1;
+                    maxArea = Math.Max(maxArea, height * width);
+                }
+                stack.Push(j);
+            }
+        }
+
+        return maxArea;
+    }
+}
