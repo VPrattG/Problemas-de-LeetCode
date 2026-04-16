@@ -1,0 +1,41 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int val=0, ListNode next=null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode Partition(ListNode head, int x) {
+        // Uso de dos punteros
+        ListNode dummyBefore = new ListNode(0);
+        ListNode dummyAfter = new ListNode(0);
+        // Como hay dos listas, se manejan dos nodos que viajan
+        ListNode navBefore = dummyBefore;
+        ListNode navAfter = dummyAfter;
+
+        // No importa que se modifique head, se devolverá otro nodo
+        while(head != null){
+            if(head.val < x){
+                navBefore.next = head;
+                navBefore = navBefore.next;
+            } else{
+                navAfter.next = head;
+                navAfter = navAfter.next;
+            }
+            head = head.next;
+        }
+
+        // Evita ciclos en el nodo porque navAfter toma valores de head
+        // que también se conectan con dummyBefore
+        navAfter.next = null;
+        // Se conectan ambas listas
+        navBefore.next = dummyAfter.next;
+
+        return dummyBefore.next;
+    }
+}
