@@ -1,0 +1,65 @@
+public class Solution {
+    private int[,,] combos;
+    private string st1, st2;
+    
+    public bool IsScramble(string s1, string s2) {
+        if(s1 == s2) return true;
+        
+        int n = s1.Length;
+        st1 = s1;
+        st2 = s2;
+        // Para almacenar combinaciones y si coinciden
+        combos = new int[n, n, n + 1];
+
+        return DFS(0, 0, n);
+    }
+
+    // Revisa que st1 desde posición i hasta n y st2 desde posición j hasta n sean iguales
+    private bool DFS(int i, int j, int n){
+        // Por si ya se usó la combinación
+        if(combos[i, j, n] != 0) return combos[i, j, n] == 1;
+
+        // Revisar las mitades permite reducir el tiempo de cálculo, si es posible
+        string a = st1.Substring(i, n);
+        string b = st2.Substring(j, n);
+
+        if(a == b){
+            combos[i, j, n] = 1;
+            return true;
+        }
+
+        // Si las mitades no coinciden, se revisan las cadenas por completo
+        // Espacio constante para almacenar qué letras se han usado
+        int[] letterCount = new int[26];
+        // Busca que las combinaciones sumen a cero, sumando y restando en cada posición
+        for(int k = 0; k < n; k++){
+            letterCount[st1[i + k] - 'a']++;
+            letterCount[st2[j + k] - 'a']--;
+        }
+
+        foreach(int c in letterCount){
+            // Si las letras no coinciden, la combinación se almacena como inválida
+            if(c != 0){
+                combos[i, j, n] = -1;
+                return false;
+            }
+        }
+
+        // Se revisa que las mitades coincidan
+        // Primero sin intercambiar, y luego intercambiando posiciones
+        for(int k = 1; k < n; k++){
+            if(DFS(i, j, k) && DFS(i + k, j + k, n - k)){
+                combos[i, j, n] = 1;
+                return true;
+            }
+            if(DFS(i, j + n - k, k) && DFS(i + k, j, n - k)){
+                combos[i, j, n] = 1;
+                return true;
+            }
+        }
+
+        // Si todo falló, significa que no coinciden
+        combos[i, j, n] = -1;
+        return false;
+    }
+}
