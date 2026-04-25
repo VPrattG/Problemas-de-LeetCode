@@ -1,0 +1,27 @@
+public class Solution {
+    public int NumTrees(int n) {
+        int[] dp = new int[n + 1];
+        
+        for(int i = 0; i < dp.Length; i++){
+            dp[i] = -1;
+        }
+        
+        return AuxSolver(n, dp);
+    }
+    public int AuxSolver(int n, int[] dp){
+        // Descarta casos con 0 o 1 nodos
+        if(n <= 1) return 1;
+        // Evita cálculos redundantes
+        if(dp[n] != -1) return dp[n];
+
+        int result = 0;
+
+        for(int i = 1; i <= n; i++){
+            // Se multiplican porque representa el posible orden de los nodos a la izquierda
+            // combinado con el posible orden de los nodos a la derecha
+            result += AuxSolver(i - 1, dp) * AuxSolver(n - i, dp);
+        }
+
+        return dp[n] = result;
+    }
+}
