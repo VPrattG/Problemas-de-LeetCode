@@ -1,0 +1,39 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    TreeNode prev = null;
+    bool result = true;
+
+    public bool IsValidBST(TreeNode root) {
+        AuxIsValidBST(root);
+        return result;
+    }
+
+    private void AuxIsValidBST(TreeNode root){
+        // Cuando se llega al final de una rama del árbol binario
+        if(root == null) return;
+
+        AuxIsValidBST(root.left);
+
+        // Para el primer nodo en llegar a esta condición
+        if(prev == null) prev = root;
+        // Si el orden de los nodos no cumple con el de un árbol binario
+        else if(root.val <= prev.val) result = false;
+        // Caso esperado
+        else prev = root;
+
+        // Continúa la navegación del árbol binario
+        AuxIsValidBST(root.right);
+    }
+}
