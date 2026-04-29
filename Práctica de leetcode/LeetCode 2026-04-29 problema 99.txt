@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    // Para recordar el nodo anterior durante el recorrido
+    TreeNode prev;
+    // Nodos incorrectos que deben cambiar
+    TreeNode first;
+    TreeNode second;
+    
+    public void RecoverTree(TreeNode root) {
+        AuxDFS(root);
+    
+        // Se realiza el cambio
+        int temp = first.val;
+        first.val = second.val;
+        second.val = temp;
+    }
+    
+    public void AuxDFS(TreeNode node){
+        if(node == null) return;
+
+        AuxDFS(node.left);
+
+        // Busca nodos con valores incorrectos
+        if(prev != null && prev.val > node.val){
+            if(first == null) first = prev;
+            second = node;
+        }
+
+        prev = node;
+
+        AuxDFS(node.right);
+    }
+}
