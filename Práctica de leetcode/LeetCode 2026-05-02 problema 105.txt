@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    // Rastrea el índice en el arreglo preorder
+    private int preorderIndex = 0;
+    // Facilita el acceso a los valores
+    private Dictionary<int, int> inorderNodes;
+    
+    public TreeNode BuildTree(int[] preorder, int[] inorder) {
+        if(preorder.Length == 1) return new TreeNode(preorder[0]);
+    
+        int n = inorder.Length;
+        inorderNodes = new Dictionary<int, int>();
+    
+        for(int i = 0; i < n; i++){
+            inorderNodes[inorder[i]] = i;
+        }
+        
+        return AuxBuilder(preorder, 0, n - 1);
+    }
+    
+    private TreeNode AuxBuilder(int[] preorder, int start, int end){
+        // Añade valores nulos al árbol binario
+        if(start > end) return null;
+
+        int nodeVal = preorder[preorderIndex++];
+        TreeNode node = new TreeNode(nodeVal);
+
+        // inorder permite segmentar los nodos hijos en "subarreglos"
+        // para construir el resto del árbol binario
+        int inorderIndex = inorderNodes[nodeVal];
+
+        node.left = AuxBuilder(preorder, start, inorderIndex - 1);
+        node.right = AuxBuilder(preorder, inorderIndex + 1, end);
+
+        return node;
+    }
+}
