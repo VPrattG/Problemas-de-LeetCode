@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    private int postorderIndex;
+    private Dictionary<int, int> inorderNodes;
+    
+    public TreeNode BuildTree(int[] inorder, int[] postorder) {
+        int n = inorder.Length;
+        postorderIndex = n - 1;
+        inorderNodes = new Dictionary<int, int>();
+
+        for(int i = 0; i < n; i++) inorderNodes[inorder[i]] = i;
+
+        return AuxBuilder(postorder, 0, n - 1);
+    }
+    
+    public TreeNode AuxBuilder(int[] postorder, int start, int end){
+        if(start > end || postorderIndex < 0) return null;
+
+        TreeNode node = new TreeNode(postorder[postorderIndex--]);
+
+        int inorderIndex = inorderNodes[node.val];
+
+        node.right = AuxBuilder(postorder, inorderIndex + 1, end);
+        node.left = AuxBuilder(postorder, start, inorderIndex - 1);
+
+        return node;
+    }
+}
