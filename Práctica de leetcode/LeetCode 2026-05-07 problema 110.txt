@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public bool IsBalanced(TreeNode root) {
+        return HeightCheck(root) != -1;
+    }
+    private int HeightCheck(TreeNode root){
+        //  Caso base
+        if(root == null) return 0;
+
+        // Las siguientes dos condiciones if son para terminar el código
+        // rápidamente, si es necesario
+        int leftHeight = HeightCheck(root.left);
+        if(leftHeight == -1) return -1;
+
+        int rightHeight = HeightCheck(root.right);
+        if(rightHeight == -1) return -1;
+
+        // En un árbol balanceado por altura, la altura de los nodos hijos
+        // no puede tener una diferencia mayor de 1
+        if(Math.Abs(leftHeight - rightHeight) > 1) return -1;
+
+        // + 1 porque incluye el nodo actual
+        return 1 + Math.Max(leftHeight, rightHeight);
+    }
+}
