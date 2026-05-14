@@ -1,0 +1,17 @@
+public class Solution {
+    public IList<int> GetRow(int rowIndex) {
+        IList<int> row = new List<int>();
+        row.Add(1); // Primer valor
+
+        for(int i = 1; i <= rowIndex; i++){
+            // Se usan valores long para evitar el desbordamiento de datos
+            // Para manejar la siguiente fila
+            long previousValue = row[i - 1];
+            // Se calcula mediante la fórmula de coeficiente binomial
+            long currentValue = previousValue * (rowIndex - i + 1) / i;
+            row.Add((int)currentValue);
+        }
+
+        return row;
+    }
+}
