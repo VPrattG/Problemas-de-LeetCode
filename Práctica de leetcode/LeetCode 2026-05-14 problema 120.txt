@@ -1,0 +1,18 @@
+public class Solution {
+    public int MinimumTotal(IList<IList<int>> triangle) {
+        // Se usa - 2 para usar índice 0 y para revisar los valores de la fila de abajo
+        // Se revisará el triángulo de abajo hacia arriba
+        for(int i = triangle.Count - 2; i >= 0; i--){
+            for(int j = 0; j < triangle[i].Count; j++){
+                // Se busca la casilla con el valor mínimo
+                int below = triangle[i + 1][j];
+                int belowRight = triangle[i + 1][j + 1];
+
+                // Se suma el valor mínimo a la casilla para facilitar cálculos futuros
+                triangle[i][j] += Math.Min(below, belowRight);
+            }
+        }
+
+        return triangle[0][0];
+    }
+}
