@@ -1,0 +1,21 @@
+public class Solution {
+    public int MaxProfit(int[] prices) {
+        int buy1 = -prices[0], sell1 = int.MinValue;
+        int buy2 = int.MinValue, sell2 = int.MinValue;
+
+        for(int i = 1; i < prices.Length; i++){
+            // Se usan valores negativos para contemplar lo que se restará de las ganancias
+            buy1 = Math.Max(buy1, -prices[i]);
+            // Revisa cuándo se obtendrán las mayores ganancias en la primera compra
+            sell1 = Math.Max(sell1, buy1 + prices[i]);
+            // Requiere saber las ganancias de la compra anterior para calcular este valor
+            buy2 = Math.Max(buy2, sell1 - prices[i]);
+            // Lo mismo que con la primera compra
+            sell2 = Math.Max(sell2, buy2 + prices[i]);
+        }
+
+        // Como se usa MinValue, se revisa en caso de que no existió ganancia alguna
+        // comparando el valor final con 0
+        return Math.Max(0, sell2);
+    }
+}
