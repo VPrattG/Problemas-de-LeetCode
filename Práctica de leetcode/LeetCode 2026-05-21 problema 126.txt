@@ -1,0 +1,103 @@
+public class Solution {
+    // Lista de palabras adyacentes
+    Dictionary<string, HashSet<string>> adjList;
+    IList<IList<string>> result;
+    public IList<IList<string>> FindLadders(string beginWord, string endWord, IList<string> wordList) {
+        HashSet<string> words = new HashSet<string>(wordList);
+        result = new List<IList<string>>();
+        
+        if(!words.Contains(endWord)) return new List<IList<string>>();
+        
+        adjList = new Dictionary<string, HashSet<string>>();
+
+        // visitedMap mantiene un registro de las transformaciones para llegar a endWord desde beginWord
+        Dictionary<string, int> visitedMap = new Dictionary<string, int>();
+        Queue<string> q = new Queue<string>();
+        q.Enqueue(beginWord);
+        visitedMap[beginWord] = 0;
+
+        int qLength = 0;
+        string step = "";
+        string patternString = "";
+        StringBuilder pattern = new StringBuilder();
+        char c;
+        int ladderLevel = 0;
+
+        while(q.Count > 0){
+            qLength = q.Count;
+            ladderLevel++;
+            
+            for(int i = 0; i < qLength; i++){
+                // Inicia pruebas con la siguiente palabra
+                step = q.Dequeue();
+
+                if(step == endWord){
+                    DFS(step, beginWord, new Stack<string>());
+                    break;
+                }
+
+                for(int j = 0; j < step.Length; j++){
+                    // Para modificar la palabra fácilmente
+                    pattern.Append(step);
+
+                    // Este ciclo es de tiempo constante, pues prueba las letras del abecedario
+                    for(int k = 0; k < 26; k++){
+                        // c permite revertir el valor de la letra al original
+                        c = pattern[j];
+                        // Se cambia la letra en la posición actual
+                        pattern[j] = (char)(97 + k);
+                        patternString = pattern.ToString();
+
+                        // Si coincide con la palabra actual, se ignora
+                        if(patternString == step) continue;
+
+                        // Si se encuentra una transformación nueva
+                        if(words.Contains(patternString) && !visitedMap.ContainsKey(patternString)){
+                            q.Enqueue(patternString);
+                            adjList.TryAdd(patternString, new HashSet<string>());
+                            // Se agrega la nueva palabra en la secuencia al HashSet
+                            adjList[patternString].Add(step);
+                            // Se añade a la lista de palabras visitadas
+                            // el int representa la cantidad de palabras en el proceso de transformación
+                            visitedMap.Add(patternString, visitedMap[step] + 1);
+                        } 
+                        // Para casos donde una sola palabra se puede transformar en más de una palabra válida
+                        // como cog -> dog, y luego cog -> log
+                        else if(visitedMap.ContainsKey(patternString) && visitedMap[patternString] == visitedMap[step] + 1){
+                            adjList.TryAdd(patternString, new HashSet<string>());
+                            adjList[patternString].Add(step);
+                        }
+                        
+                        pattern[j] = c;
+                    }
+                    pattern.Clear();
+                }
+            }
+
+            if(step == endWord) break;
+        }
+
+        return result;
+    }
+
+    private void DFS(string word, string beginWord, Stack<string> sequence){
+        // Para terminar la secuencia de DFS
+        if(word == beginWord){
+            sequence.Push(word);
+            result.Add(sequence.ToList());
+            sequence.Pop();
+            
+            return;
+        }
+        if(adjList.ContainsKey(word)){
+            // Se revisan las palabras adyacentes a la encontrada
+            IList<string> list = adjList[word].ToList();
+
+            for(int i = 0; i < list.Count; i++){
+                sequence.Push(word);
+                DFS(list[i], beginWord, sequence);
+                sequence.Pop();
+            }
+        }
+    }
+}
