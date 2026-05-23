@@ -1,0 +1,41 @@
+public class Solution {
+    int m, n;
+    public void Solve(char[][] board) {
+        m = board.Length; n = board[0].Length;
+
+        // Primero revisa si hay casillas O en los bordes
+        // Marca todas las casillas en esa fila o columna
+        for(int i = 0; i < m; i++){
+            if(board[i][0] == 'O') AuxDFS(board, i, 0);
+            if(board[i][n - 1] == 'O') AuxDFS(board, i, n - 1);
+        }
+
+        for(int j = 0; j < n; j++){
+            if(board[0][j] == 'O') AuxDFS(board, 0, j);
+            if(board[m - 1][j] == 'O') AuxDFS(board, m - 1, j);
+        }
+
+        // Captura todas las casillas posibles
+        // Las marcadas solo se regresan a su estado original
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(board[i][j] == 'O')
+                    board[i][j] = 'X';
+                if(board[i][j] == 'S')
+                    board[i][j] = 'O';
+            }
+        }
+    }
+    private void AuxDFS(char[][] board, int i, int j){
+        // Evita desbordamientos o casillas X
+        if(i < 0 || j < 0 || i >= m || j >= n || board[i][j] != 'O') return;
+        // Para ignorarlas en el futuro
+        board[i][j] = 'S';
+
+        // Marca las demás casillas "seguras"
+        AuxDFS(board, i - 1, j);
+        AuxDFS(board, i + 1, j);
+        AuxDFS(board, i, j - 1);
+        AuxDFS(board, i, j + 1);
+    }
+}
