@@ -1,0 +1,47 @@
+public class Solution {
+    IList<IList<string>> result;
+    IList<string> curPals;
+    bool[,] dp;
+
+    public IList<IList<string>> Partition(string s) {
+        result = new List<IList<string>>();
+        curPals = new List<string>();
+        int n = s.Length;
+        dp = new bool[n,n];
+
+        // Evita cálculos innecesarios al crear todos los palíndromos posibles
+        // Toda subcadena de 1 caracter se considera un palíndromo
+        for(int i = 0; i < n; i++) dp[i,i] = true;
+        
+        for(int length = 2; length <= n; length++){
+            for(int i = 0; i <= n - length; i++){
+                int j = i + length - 1;
+                // Para subcadenas de 2 caracteres, se revisa que ambos sean el mismo
+                // Para más de 2 caracteres, se revisa el inicio y fin
+                // y si la "sub-subcadena" es considerada un palíndromo
+                if(s[i] == s[j] && (length == 2 || dp[i + 1,j - 1])){
+                    dp[i,j] = true;
+                }
+            }
+        }
+        
+        AuxBacktrack(s, 0);
+        
+        return result;
+    }
+
+    private void AuxBacktrack(string s, int start){
+        if(start == s.Length){
+            result.Add(new List<string>(curPals));
+            return;
+        }
+
+        for(int end = start; end < s.Length; end++){
+            if(dp[start, end]){
+                curPals.Add(s.Substring(start, end - start + 1));
+                AuxBacktrack(s, end + 1);
+                curPals.RemoveAt(curPals.Count - 1);
+            }
+        }
+    }
+}

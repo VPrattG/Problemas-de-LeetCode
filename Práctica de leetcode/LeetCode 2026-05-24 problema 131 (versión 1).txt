@@ -1,0 +1,36 @@
+public class Solution {
+    IList<IList<string>> result;
+    IList<string> curPals;
+
+    public IList<IList<string>> Partition(string s) {
+        result = new List<IList<string>>();
+        curPals = new List<string>();
+        
+        AuxBacktrack(s, 0);
+        
+        return result;
+    }
+
+    private void AuxBacktrack(string s, int start){
+        if(start == s.Length){
+            result.Add(new List<string>(curPals));
+            return;
+        }
+
+        for(int end = start + 1; end <= s.Length; end++){
+            if(IsPalindrome(s, start, end - 1)){
+                curPals.Add(s.Substring(start, end - start));
+                AuxBacktrack(s, end);
+                curPals.RemoveAt(curPals.Count - 1);
+            }
+        }
+    }
+
+    private bool IsPalindrome(string s, int start, int end){
+        while(start < end){
+            if(s[start++] != s[end--]) return false;
+        }
+
+        return true;
+    }
+}
