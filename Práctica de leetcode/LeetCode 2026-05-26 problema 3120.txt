@@ -1,0 +1,14 @@
+public class Solution {
+    public int NumberOfSpecialChars(string word) {
+        HashSet<char> hs = new HashSet<char>(word);
+        int count = 0;
+
+        for(int i = 0; i < 26; i++){
+            // Como lo opuesto de restarle 'a' a una letra para obtener un número
+            char ch = (char)(i + 97);
+            if(hs.Contains(ch) && hs.Contains(Char.ToUpper(ch))) count++;
+        }
+
+        return count;
+    }
+}
