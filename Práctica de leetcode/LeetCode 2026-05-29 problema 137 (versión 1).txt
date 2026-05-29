@@ -1,0 +1,16 @@
+public class Solution {
+    public int SingleNumber(int[] nums) {
+        Dictionary<int, int> numList = new Dictionary<int, int>();
+
+        foreach(int num in nums){
+          if(!numList.ContainsKey(num)) numList[num] = 0;
+          numList[num]++;  
+        } 
+        
+        foreach(var pair in numList){
+            if(pair.Value == 1) return pair.Key;
+        }
+        
+        return -1;
+    }
+}
