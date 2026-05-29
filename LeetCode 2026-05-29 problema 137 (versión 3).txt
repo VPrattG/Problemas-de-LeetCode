@@ -1,0 +1,22 @@
+public class Solution {
+    public int SingleNumber(int[] nums) {
+        int oneTime = 0;
+        int twoTimes = 0;
+
+        foreach(int num in nums){
+            // En oneTime, el XOR activa los bits que han aparecido una cantidad de veces impar,
+            // pero mantiene los bits que han aparecido dos veces intactos
+            // Negar twoTimes permite remover los bits que aparecen dos veces
+            // Se mantienen solo los bits que aparecen una sola vez al usar &
+            oneTime ^= (num & ~twoTimes);
+            // En twoTimes, el XOR activa los bits que han aparecido una cantidad de veces par,
+            // removiéndolos
+            // Negar oneTime permite remover los bits que aparecen una vez
+            // Se mantienen solo los bits que aparecen dos veces al usar &
+            twoTimes ^= (num & ~oneTime);
+        }
+
+        // Al final, solo queda el valor que aparece una vez
+        return oneTime;
+    }
+}

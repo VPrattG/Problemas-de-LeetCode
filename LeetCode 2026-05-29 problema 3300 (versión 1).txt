@@ -1,0 +1,19 @@
+public class Solution {
+    public int MinElement(int[] nums) {
+        int result = int.MaxValue;
+        
+        for(int i = 0; i < nums.Length; i++){
+            int sum = 0;
+            
+            while(nums[i] != 0){
+                // Se suma el dígito de la derecha, y se remueve para futuros cálculos
+                sum += nums[i] % 10;
+                nums[i] = nums[i] / 10;
+            }
+            
+            result = Math.Min(result, sum);
+        }
+
+        return result;
+    }
+}
