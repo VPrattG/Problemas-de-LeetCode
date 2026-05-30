@@ -1,0 +1,52 @@
+/*
+// Definition for a Node.
+public class Node {
+    public int val;
+    public Node next;
+    public Node random;
+    
+    public Node(int _val) {
+        val = _val;
+        next = null;
+        random = null;
+    }
+}
+*/
+
+public class Solution {
+    public Node CopyRandomList(Node head) {
+        if(head == null) return null;
+
+        Node current = head;
+
+        while(current != null){
+            Node newNode = new Node(current.val, current.next);
+            current.next = newNode;
+            current = newNode.next;
+        }
+
+        current = head;
+
+        while(current != null){
+            // Se asigna el valor "random" al clon del nodo actual
+            if(current.random != null) current.next.random = current.random.next;
+            // Como los nodos clonados están entre los originales, se usa .next.next
+            current = current.next != null ? current.next.next : null;
+        }
+
+        // Separa las dos listas
+        Node oldHead = head;
+        Node newHead = head.next;
+        Node currentOld = oldHead;
+        Node currentNew = newHead;
+
+        while(currentOld != null){
+            currentOld.next = currentOld.next.next;
+            currentNew.next = currentNew.next != null ? currentNew.next.next : null;
+            currentOld = currentOld.next;
+            currentNew = currentNew.next;
+        }
+        
+        return newHead;
+    }
+}
