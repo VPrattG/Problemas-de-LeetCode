@@ -1,0 +1,25 @@
+public class Solution {
+    public int TotalWaviness(int num1, int num2) {
+        int waviness = 0;
+        if(num2 <= 100) return waviness;
+
+        for(int i = num1; i <= num2; i++){
+            waviness += CheckWave(i.ToString());
+        }
+
+        return waviness;
+    }
+    private int CheckWave(string value){
+        int count = 0;
+        
+        for(int i = 1; i < value.Length - 1; i++){
+            int prev = value[i - 1] - '0';
+            int curr = value[i] - '0';
+            int next = value[i + 1] - '0';
+            if((prev > curr && curr < next) ||
+            (prev < curr && curr > next)) count++;
+        }
+
+        return count;
+    }
+}

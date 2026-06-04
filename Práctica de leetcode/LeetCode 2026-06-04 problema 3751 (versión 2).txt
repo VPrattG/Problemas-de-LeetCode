@@ -1,0 +1,33 @@
+public class Solution {
+    public int TotalWaviness(int num1, int num2) {
+        int waviness = 0;
+        if (num2 <= 100) return waviness;
+        
+        // Reduce tiempos de cálculo
+        int[] dp = new int[num2 + 1];
+
+        // Cuenta los picos y fondos de los valores previos
+        for (int num = 0; num <= num2 / 10; num++)
+            CountWaviness(num, dp);
+        
+        for (int num = num1; num <= num2; num++)
+            waviness += CountWaviness(num, dp);
+
+        return waviness;
+    }
+
+    private int CountWaviness(int num, int[] dp) {
+        if (num <= 100) return 0;
+
+        int i = num % 10;
+        int j = (num / 10) % 10;
+        int k = (num / 100) % 10;
+        
+        // Si encuentra otro pico o fondo, lo agrega
+        dp[num] = dp[num / 10] + (
+            (i < j && j > k) || (i > j && j < k) ? 1 : 0
+        );
+
+        return dp[num];
+    }
+}
