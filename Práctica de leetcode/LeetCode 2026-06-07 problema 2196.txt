@@ -1,0 +1,56 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+public class Solution {
+    public TreeNode CreateBinaryTree(int[][] descriptions) {
+        Dictionary<int, TreeNode> dict = new Dictionary<int, TreeNode>();
+        TreeNode root = new TreeNode();
+        HashSet<int> children = new HashSet<int>();
+
+        foreach(int[] arr in descriptions){
+            // Información a utilizar
+            int parent = arr[0];
+            int child = arr[1];
+            bool isLeft = arr[2] == 1;
+
+            TreeNode parentNode;
+            TreeNode childNode;
+
+            if(!dict.ContainsKey(parent)){
+                dict[parent] = new TreeNode(parent);
+            }
+
+            parentNode = dict[parent];
+
+            if(!dict.ContainsKey(child)){
+                dict[child] = new TreeNode(child);
+            }
+
+            childNode = dict[child];
+
+            if(isLeft) parentNode.left = childNode;
+            else parentNode.right = childNode;
+
+            // Se añade al HashSet
+            children.Add(child);
+        }
+
+        // El valor no incluido en el HashSet será el nodo raíz
+        foreach(var pair in dict){
+            if(!children.Contains(pair.Key)) return pair.Value;
+        }
+
+        // Por si acaso
+        return root;
+    }
+}
