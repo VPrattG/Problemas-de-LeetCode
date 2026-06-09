@@ -1,0 +1,42 @@
+public class Solution {
+    public int MaxPoints(int[][] points) {
+        int n = points.Length;
+        if(n < 3) return n;
+
+        double infinite = double.MaxValue;
+        int result = 2;
+
+        Dictionary<(double, double), HashSet<(int, int)>> lines = new();
+
+        for(int i = 0; i < n - 1; i++){
+            for(int j = i + 1; j < n; j++){
+                int[] point1 = points[i];
+                int[] point2 = points[j];
+                
+                bool isVertical = point1[0] == point2[0];
+
+                // Obtiene el ángulo de inclinación
+                double slope = isVertical 
+                    ? infinite 
+                    : (double)(point2[1] - point1[1]) / (point2[0] - point1[0]);
+
+                // Obtiene el punto de la línea donde se toca la y, asumiendo que x = 0
+                double yIntercept = isVertical
+                    ? point1[0] : point1[1] - slope * point1[0];
+
+                // Crea un nuevo HashSet si es necesario
+                if(!lines.TryGetValue((slope, yIntercept), out var lineset)){
+                    lineset = new();
+                    lines[(slope, yIntercept)] = lineset;
+                }
+
+                lineset.Add((point1[0], point1[1]));
+                lineset.Add((point2[0], point2[1]));
+
+                result = Math.Max(result, lineset.Count);
+            }
+        }
+
+        return result;
+    }
+}
