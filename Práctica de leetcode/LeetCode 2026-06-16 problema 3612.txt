@@ -1,0 +1,27 @@
+public class Solution {
+    public string ProcessStr(string s) {
+        StringBuilder result = new StringBuilder();
+        
+        foreach(char c in s){
+            switch(c){
+                case '*':
+                    if(result.Length > 0)
+                        result.Length--;
+                    break;
+                case '#':
+                    result.Append(result.ToString());
+                    break;
+                case '%':
+                    char[] arr = result.ToString().ToCharArray();
+                    Array.Reverse(arr);
+                    result = new StringBuilder(new string(arr));
+                    break;
+                default:
+                    result.Append(c);
+                    break;
+            }
+        }
+
+        return result.ToString();
+    }
+}
