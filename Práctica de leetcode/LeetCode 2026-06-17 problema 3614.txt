@@ -1,0 +1,50 @@
+public class Solution {
+    public char ProcessStr(string s, long k) {
+        long length = 0;
+
+        // No construye la nueva cadena, solo simula hacerlo
+        foreach(char c in s){
+            switch(c){
+                case '*':
+                    if(length > 0) length--;
+                    break;
+                case '#':
+                    length *= 2;
+                    break;
+                case '%':
+                    break;
+                default:
+                    length++;
+                    break;
+            }
+        }
+
+        if(k + 1 > length) return '.';
+
+        // Revierte los cambios hechos a la cadena
+        // Como un foreach, pero al revés
+        for(int i = s.Length - 1; i >= 0; i--){
+            switch(s[i]){
+                case '*':
+                    length++;
+                    break;
+                case '#':
+                    if(k >= length / 2)
+                        k -= length / 2;
+                    length /= 2;
+                    break;
+                // Invierte la posición de k
+                case '%':
+                    k = length - 1 - k;
+                    break;
+                default:
+                    if(length == k + 1)
+                        return s[i];
+                    length--;
+                    break;
+            }
+        }
+
+        return '.';
+    }
+}
