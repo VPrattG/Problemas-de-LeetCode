@@ -1,0 +1,11 @@
+public class Solution {
+    public double AngleClock(int hour, int minutes) {
+        // Ángulo de la hora
+        double x = hour + minutes / 60.0;
+        // Diferencia entre minutero y horario
+        double difference = (11.0 * x) % 12.0;
+
+        // 360 grados, 12 ranuras = 30 grados por ranura
+        return Math.Min(difference, 12.0 - difference) * 30;
+    }
+}

@@ -1,0 +1,58 @@
+public class Solution {
+    public int MaximumGap(int[] nums) {
+        if(nums.Length < 2) return 0;
+        
+        int n = nums.Length;
+        AuxRadixSort(nums, n);
+        int maxGap = nums[1] - nums[0];
+        
+        for(int i = 1; i < n - 1; i++){
+            maxGap = Math.Max(maxGap, nums[i+1] - nums[i]);
+        }
+        
+        return maxGap;
+    }
+
+    private void AuxRadixSort(int[] nums, int n){
+        int max = GetMax(nums);
+
+        for(int exp = 1; max / exp > 0; exp *= 10){
+            CountSort(nums, n, exp);
+        }
+    }
+
+    private int GetMax(int[] nums){
+        int max = nums[0];
+        
+        foreach(int num in nums){
+            max = Math.Max(num, max);
+        }
+        
+        return max;
+    }
+
+    private void CountSort(int[] nums, int n, int exp){
+        int[] output = new int[n];
+        int[] counts = new int[10];
+
+        // Cuántas veces hay un dígito en cierta posición
+        for(int i = 0; i < n; i++){
+            int digit = (nums[i] / exp) % 10;
+            counts[digit]++;
+        }
+
+        for(int i = 1; i < 10; i++){
+            counts[i] += counts[i - 1];
+        }
+
+        for(int i = n - 1; i >= 0; i--){
+            int digit = nums[i] / exp % 10;
+            output[counts[digit] - 1] = nums[i];
+            counts[digit]--;
+        }
+
+        for(int i = 0; i < n; i++){
+            nums[i] = output[i];
+        }
+    }
+}
