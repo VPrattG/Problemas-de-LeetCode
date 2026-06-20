@@ -1,0 +1,32 @@
+public class Solution {
+    public int MaxBuilding(int n, int[][] restrictions) {
+        List<int[]> r = new List<int[]>(restrictions);
+        r.Add(new int[]{1, 0});
+        r.Sort((a, b) => a[0].CompareTo(b[0]));
+        
+        int count = r.Count;
+        
+        for(int i = 1; i < count; i++){
+            r[i][1] = yCap(r[i - 1], r[i]);
+        }
+
+        for(int i = count - 2; i >= 0; i--){
+            r[i][1] = yCap(r[i + 1], r[i]);
+        }
+
+        int result = 0;
+        for(int i = 1; i < count; i++){
+            result = Math.Max(result, yPeak(r[i - 1], r[i]));
+        }
+
+        return Math.Max(result, r[count - 1][1] + n - r[count - 1][0]);
+    }
+
+    int yCap(int[] a, int[] b){
+        return Math.Min(b[1], a[1] + Math.Abs(b[0] - a[0]));
+    }
+
+    int yPeak(int[] a, int[] b){
+        return (a[1] + b[1] + b[0] - a[0]) >> 1;
+    }
+}
