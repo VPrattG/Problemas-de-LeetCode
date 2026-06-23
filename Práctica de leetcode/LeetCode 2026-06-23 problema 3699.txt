@@ -1,0 +1,45 @@
+public class Solution {
+    // Recomendado por leetcode para evitar O(m^2)
+    private static int modulo = 1000000007;
+    
+    public int ZigZagArrays(int n, int l, int r) {
+        // Como no se construyen los arreglos, no importa qué numeros se usen
+        // siempre y cuando se respete el rango de valores
+        // por ende, [l, r] es lo mismo que [1, (r - l + 1)]
+        int m = r - l + 1;
+        int[] dp = new int[m];
+        
+        // Para longitudes de 1, solo hay una posibilidad
+        Array.Fill(dp, 1);
+
+        for(int i = 2; i <= n; i++){
+            int sum = 0;
+            // Se acumulan sufijos o prefijos de acuerdo a si i es par o impar
+            if(i % 2 == 0){
+                for(int j = 0; j < m; j++){
+                    int t = dp[j];
+                    dp[j] = sum;
+                    sum = (sum + t) % modulo;
+                }
+            }
+            else{
+                for(int j = m - 1; j >= 0; j--){
+                    int t = dp[j];
+                    dp[j] = sum;
+                    sum = (sum + t) % modulo;
+                }
+            }
+        }
+
+        int result = 0;
+
+        // Última pasada a través del arreglo
+        for(int j = 0; j < m; j++){
+            result = (result + dp[j]) % modulo;
+        }
+
+        // Como se permite aumentar o reducir, cada acción tiene su contraparte
+        // para no calcularlo todo, se multiplica por 2 al final
+        return (result * 2) % modulo;
+    }
+}
