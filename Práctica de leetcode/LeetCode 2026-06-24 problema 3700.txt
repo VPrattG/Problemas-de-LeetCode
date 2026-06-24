@@ -1,0 +1,64 @@
+public class Solution {
+    private static long modulo = 1000000007;
+    public int ZigZagArrays(int n, int l, int r) {
+        int m = r - l + 1;
+        // Por la versión que empieza subiendo y bajando
+        int size = 2 * m;
+
+        long[,] t = new long[size, size];
+
+        for(int i = 0; i < m; i++){
+            for(int j = i + 1; j < m; j++) t[i, m + j] = 1;
+            for(int j = 0; j < i; j++) t[m + i,j] = 1;
+        }
+
+        long[,] result = new long[size, size];
+
+        for(int i = 0; i < size; i++) result[i, i] = 1;
+
+        long power = n - 1;
+
+        while(power > 0){
+            if(power % 2 == 1)
+                result = AuxMultiply(result, t);
+
+            t = AuxMultiply(t, t);
+
+            power /= 2;
+        }
+
+        long answer = 0;
+
+        for(int i = 0; i < size; i++){
+            long rowSum = 0;
+            for(int j = 0; j < size; j++)
+                rowSum = (rowSum + result[i, j]) % modulo;
+
+            answer = (answer + rowSum) % modulo;
+        }
+
+        return (int)answer;
+    }
+
+    private long[,] AuxMultiply(long[,] a, long[,] b){
+        int size = a.GetLength(0);
+
+        long[,] c = new long[size, size];
+
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                if(a[i, j] == 0) continue;
+
+                long current = a[i, j];
+
+                for(int k = 0; k < size; k++){
+                    if(b[j, k] == 0) continue;
+
+                    c[i, k] = (c[i, k] + current * b[j, k]) % modulo;
+                }
+            }
+        }
+
+        return c;
+    }
+}
