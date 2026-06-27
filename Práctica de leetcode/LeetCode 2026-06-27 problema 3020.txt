@@ -1,0 +1,31 @@
+public class Solution {
+    public int MaximumLength(int[] nums) {
+        Dictionary<long, int> frequencies = new Dictionary<long, int>();
+
+        foreach(int num in nums){
+            frequencies.TryGetValue(num, out int n);
+            frequencies[num] = n + 1;
+        }
+
+        // La cantidad de 1s en el arreglo
+        // Solo se puede usar una cantidad impar
+        frequencies.TryGetValue(1, out int oneFreq);
+        int result = (oneFreq % 2 == 1) ? oneFreq : oneFreq - 1;
+
+        frequencies.Remove(1);
+
+        foreach(long freq in frequencies.Keys){
+            int total = 0;
+            long x = freq;
+
+            while(frequencies.TryGetValue(x, out int f) && f > 1){
+                total += 2;
+                x *= x;
+            }
+
+            result = Math.Max(result, total + (frequencies.ContainsKey(x) ? 1 : -1));
+        }
+
+        return result;
+    }
+}
