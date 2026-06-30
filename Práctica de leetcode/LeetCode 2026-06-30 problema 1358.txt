@@ -1,0 +1,21 @@
+public class Solution {
+    public int NumberOfSubstrings(string s) {
+        int result = 0;
+        // Posición más reciente de a, b, y c
+        // Empieza en -1 para no agregar valores cuando no se hayan encontrado las 3 letras
+        // al menos una vez
+        int[] pos = {-1, -1, -1};
+
+        for(int i = 0; i < s.Length; i++){
+            // Convierte la letra en un valor numérico
+            pos[s[i] - 'a'] = i;
+            // El valor mínimo representa las cadenas anteriormente encontradas
+            // y que las futuras cadenas requieren este mismo número para ser válidas
+            // hasta encontrar una nueva instancia de la letra
+            // El +1 es para convertir el valor de posición a valor numérico
+            result += Math.Min(pos[0], Math.Min(pos[1], pos[2])) + 1;
+        }
+        
+        return result;
+    }
+}
