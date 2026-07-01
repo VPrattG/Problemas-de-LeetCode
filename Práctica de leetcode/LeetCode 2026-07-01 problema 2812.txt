@@ -1,0 +1,107 @@
+public class Solution {
+    // Direcciones: Derecha, izquierda, arriba, abajo
+    int[][] dirs = {new int[]{0, 1}, new int[]{0, -1}, new int[]{1, 0}, new int[]{-1, 0}};
+    public int MaximumSafenessFactor(IList<IList<int>> grid) {
+        int n = grid.Count;
+        int[,] matrix = new int[n, n];
+        
+        Queue<int[]> queue = new Queue<int[]>();
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(grid[i][j] == 1){
+                    queue.Enqueue(new int[]{i, j});
+                    matrix[i, j] = 0;
+                } else{
+                    matrix[i, j] = -1;
+                }
+            }
+        }
+
+        // Determina el nivel de seguridad de cada casilla
+        while(queue.Count > 0){
+            int size = queue.Count;
+            while(size-- > 0){
+                int[] curr = queue.Dequeue();
+
+                foreach(int[] dir in dirs){
+                    int dirI = curr[0] + dir[0];
+                    int dirJ = curr[1] + dir[1];
+                    int value = matrix[curr[0], curr[1]];
+
+                    if(IsValidCell(matrix, dirI, dirJ) && matrix[dirI, dirJ] == -1){
+                        // Aumenta el nivel de seguridad
+                        matrix[dirI, dirJ] = value + 1;
+                        queue.Enqueue(new int[]{dirI, dirJ});
+                    }
+                }
+            }
+        }
+
+        // Búsqueda binaria
+        int start = 0;
+        int end = 0;
+        int result = -1;
+
+        // Busca el mayor valor de seguridad
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                end = Math.Max(end, matrix[i, j]);
+            }
+        }
+
+        while(start <= end){
+            int mid = start + (end - start) / 2;
+
+            if(IsValidSafeness(matrix, mid)){
+                // Confirma el valor actual, y busca resultados mayores
+                result = mid;
+                start = mid + 1;
+            } else{
+                end = mid - 1;
+            }
+        }
+
+        return result;
+    }
+
+    // Comprueba si se puede llegar mediante esa ruta
+    private bool IsValidSafeness(int[,] grid, int minSafeness){
+        int n = grid.GetLength(0);
+
+        if(grid[0,0] < minSafeness || grid[n - 1, n - 1] < minSafeness)
+            return false;
+        
+        Queue<int[]> queue = new Queue<int[]>();
+        queue.Enqueue(new int[]{0,0});
+
+        bool[,] visited = new bool[n, n];
+        visited[0, 0] = true;
+
+        // Se usa BFS para determinar una ruta válida
+        while(queue.Count > 0){
+            int[] curr = queue.Dequeue();
+
+            if(curr[0] == n - 1 && curr[1] == n - 1)
+                return true;
+
+            foreach(int[] dir in dirs){
+                int dirI = curr[0] + dir[0];
+                int dirJ = curr[1] + dir[1];
+
+                if(IsValidCell(grid, dirI, dirJ) && !visited[dirI, dirJ] 
+                && grid[dirI, dirJ] >= minSafeness){
+                    visited[dirI, dirJ] = true;
+                    queue.Enqueue(new int[]{dirI, dirJ});
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsValidCell(int[,] matrix, int i, int j){
+        int n = matrix.GetLength(0);
+        return i >= 0 && j >= 0 && i < n && j < n;
+    }
+}
