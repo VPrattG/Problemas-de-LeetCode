@@ -1,0 +1,76 @@
+public class Solution {
+    public int FindMaxPathScore(int[][] edges, bool[] online, long k) {
+        int n = online.Length;
+        List<(int, int)>[] graph = new List<(int, int)>[n];
+        for(int i = 0; i < n; i++){
+            graph[i] = new List<(int, int)>();
+        }
+
+        int left = int.MaxValue, right = 0;
+        foreach(var edge in edges){
+            int u = edge[0], v = edge[1], w = edge[2];
+            if(!online[u] || !online[v]) continue;
+
+            // Se asigna el costo de la conexión con otros nodos
+            graph[u].Add((v, w));
+            // Se buscan los costos más altos y bajos
+            left = Math.Min(left, w);
+            right = Math.Max(right, w);
+        }
+
+        bool Check(int mid){
+            long[] distance = new long[n];
+            Array.Fill(distance, long.MaxValue);
+            SortedSet<(long, int)> pq = new SortedSet<(long, int)>();
+
+            distance[0] = 0;
+            pq.Add((0,0));
+
+            while(pq.Count > 0){
+                var (d, u) = pq.Min;
+                pq.Remove(pq.Min);
+
+                // Si el costo es mayor al límite
+                if(d > k) {
+                    return false;
+                }
+                // Si se llegó al final
+                if(u == n - 1){
+                    return true;
+                }
+                if(d > distance[u]){
+                    continue;
+                }
+
+                // Revisa si se puede continuar con más opciones
+                foreach(var (v, w) in graph[u]){
+                    if(w < mid) continue;
+                    if(distance[v] > distance[u] + w){
+                        if(distance[v] != long.MaxValue){
+                            pq.Remove((distance[v], v));
+                        }
+                        distance[v] = distance[u] + w;
+                        pq.Add((distance[v], v));
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        // Si no se puede llegar desde el valor más pequeño, no se puede llegar en lo absoluto
+        if(!Check(left)) return -1;
+
+        // Busca el menor valor posible que funcione
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            if(Check(mid)){
+                left = mid + 1;
+            } else{
+                right = mid - 1;
+            }
+        }
+
+        return right;
+    }
+}
