@@ -1,0 +1,26 @@
+public class Solution {
+    private int _Find(int[] root, int i){
+        if(root[i] == i) return i;
+        return root[i] = _Find(root, root[i]);
+    }
+    
+    public int MinScore(int n, int[][] roads) {
+        int[] root = new int[n + 1];
+        for(int i = 0; i <= n; i++) 
+            root[i] = i;
+
+        // Usa union-find para agrupar nodos
+        foreach(int[] road in roads)
+            root[_Find(root, road[0])] = _Find(root, road[1]);
+
+        // Valor mayor a cualquier otro posible en este problema
+        int result = 10001;
+        foreach(int[] road in roads)
+            // Si pertenece al mismo grupo que el nodo 1
+            if(_Find(root, road[0]) == _Find(root, 1))
+                // Busca el menor valor de ruta posible
+                result = Math.Min(result, road[2]);
+
+        return result;
+    }
+}
