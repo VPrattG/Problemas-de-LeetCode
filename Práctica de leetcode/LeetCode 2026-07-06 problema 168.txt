@@ -1,0 +1,15 @@
+public class Solution {
+    public string ConvertToTitle(int columnNumber) {
+        // Sistema numérico de base 26
+        StringBuilder sb = new StringBuilder();
+
+        while(columnNumber > 0){
+            // Cambia de valor numérico a posición
+            columnNumber--;
+            sb.Insert(0, (char) ((columnNumber % 26) + 'A'));
+            columnNumber /= 26;
+        }
+
+        return sb.ToString();
+    }
+}
