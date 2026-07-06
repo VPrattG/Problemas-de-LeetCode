@@ -1,0 +1,22 @@
+public class Solution {
+    public int RemoveCoveredIntervals(int[][] intervals) {
+        // Primero se organiza el arreglo
+        Array.Sort(intervals, (a, b) =>
+        {
+            int cmp = a[0].CompareTo(b[0]);
+            return cmp != 0 ? cmp : b[1].CompareTo(a[1]);
+        });
+        
+        int result = 0, r = 0;
+        
+        // Solo se revisa el límite superior del rango, porque están en orden
+        foreach(int[] inter in intervals){
+            if(inter[1] > r){
+                r = inter[1];
+                result++;
+            }
+        }
+
+        return result;
+    }
+}
