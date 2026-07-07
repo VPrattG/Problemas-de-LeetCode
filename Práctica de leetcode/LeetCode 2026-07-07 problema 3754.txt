@@ -1,0 +1,21 @@
+public class Solution {
+    public long SumAndMultiply(int n) {
+        long result = 0;
+        int sum = 0;
+        int exp = 1;
+
+        while(n > 0){
+            int digit = n % 10;
+            
+            if(digit > 0){
+                result += digit * exp;
+                sum += digit;
+                exp *= 10;
+            }
+            
+            n /= 10;
+        }
+
+        return result * sum;
+    }
+}
