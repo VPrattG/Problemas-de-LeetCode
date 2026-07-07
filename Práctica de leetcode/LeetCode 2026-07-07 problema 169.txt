@@ -1,0 +1,15 @@
+public class Solution {
+    public int MajorityElement(int[] nums) {
+        // Guarda el valor más frecuente, y la cantidad de veces que aparece
+        int result = 0;
+        int majority = 0;
+
+        foreach(int n in nums){
+            if(majority == 0) result = n;
+
+            majority += n == result ? 1 : -1;
+        }
+
+        return result;
+    }
+}
