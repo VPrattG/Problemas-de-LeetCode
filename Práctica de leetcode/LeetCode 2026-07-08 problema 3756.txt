@@ -1,0 +1,49 @@
+public class Solution {
+    private const int MODULO = 1000000007;
+    private const int MAXPOW = 100001;
+    private static readonly int[] pow = new int[MAXPOW];
+
+    static Solution(){
+        pow[0] = 1;
+        for(int i = 1; i < MAXPOW; i++){
+            pow[i] = (int) ((long)pow[i - 1] * 10 % MODULO);
+        }
+    }
+    
+    public int[] SumAndMultiply(string s, int[][] queries) {
+        int n = s.Length;
+
+        int[] sumSoFar = new int[n + 1];
+        int[] concatSoFar = new int[n + 1];
+        int[] digitLength = new int[n + 1];
+
+        for(int i = 0; i < n; i++){
+            int digit = s[i] - '0';
+            sumSoFar[i + 1] = sumSoFar[i] + digit;
+
+            if(digit != 0){
+                concatSoFar[i + 1] = (int)(((long)concatSoFar[i] * 10 + digit) % MODULO);
+                digitLength[i + 1] = digitLength[i] + 1;
+            } else{
+                concatSoFar[i + 1] = concatSoFar[i];
+                digitLength[i + 1] = digitLength[i];
+            }
+        }
+
+        int[] result = new int[queries.Length];
+        int j = 0;
+
+        foreach(int[] query in queries){
+            int left = query[0], right = query[1] + 1;
+
+            long sub = 
+                (long) concatSoFar[left] * pow[digitLength[right] - digitLength[left]] % MODULO;
+
+            long x = (concatSoFar[right] - sub + MODULO) % MODULO;
+
+            result[j++] = (int) ((x * (sumSoFar[right] - sumSoFar[left])) % MODULO);
+        }
+
+        return result;
+    }
+}
