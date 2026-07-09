@@ -1,0 +1,28 @@
+public class Solution {
+    public bool[] PathExistenceQueries(int n, int[] nums, int maxDiff, int[][] queries) {
+        // La descripción del problema implica que los nodos se separan en secciones
+        // distintas el momento que la diferencia entre dos valores excede el límite
+        // indicado
+        // NOTA: Solo funciona para arreglos en orden no-descendiente
+        int[] sections = new int[n];
+        int sectionNum = 0;
+
+        for(int i = 1; i < n; i++){
+            if(nums[i] - nums[i - 1] > maxDiff) sectionNum++;
+            sections[i] = sectionNum;
+        }
+
+        int qL = queries.Length;
+        bool[] result = new bool[qL];
+
+        for(int i = 0; i < qL; i++){
+            int[] query = queries[i];
+
+            // Se simplifica el cálculo revisando si ambos valores pertenecen a
+            // la misma sección
+            result[i] = (sections[query[0]] == sections[query[1]]);
+        }
+
+        return result;
+    }
+}

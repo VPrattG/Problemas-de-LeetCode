@@ -1,0 +1,11 @@
+public class Solution {
+    public int TitleToNumber(string columnTitle) {
+        long result = 0;
+
+        for(int i = 0; i < columnTitle.Length; i++){
+            result = result * 26 + (columnTitle[i] - 'A' + 1);
+        }
+
+        return (int) result;
+    }
+}
