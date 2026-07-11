@@ -1,0 +1,45 @@
+public class Solution {
+    int vertices, degree;
+    
+    public int CountCompleteComponents(int n, int[][] edges) {
+        List<int>[] array = new List<int>[n];
+        for (int i = 0; i < n; i++)
+        {
+            array[i] = new List<int>();
+        }
+
+        foreach(int[] edge in edges){
+            array[edge[0]].Add(edge[1]);
+            array[edge[1]].Add(edge[0]);
+        }
+
+        bool[] visited = new bool[n];
+        int result = 0;
+
+        for(int i = 0; i < n; i++){
+            bool state = visited[i];
+
+            if(!state){
+                vertices = 0; degree = 0;
+
+                DFS(i, array, visited);
+
+                if(degree == (vertices * (vertices - 1))) result++;
+            }
+        }
+
+        return result;
+    }
+
+    private void DFS(int x, List<int>[] array, bool[] visited){
+        vertices++;
+        degree += array[x].Count;
+        visited[x] = true;
+
+        foreach(int state in array[x]){
+            if(!visited[state]){
+                DFS(state, array, visited);
+            }
+        }
+    }
+}
