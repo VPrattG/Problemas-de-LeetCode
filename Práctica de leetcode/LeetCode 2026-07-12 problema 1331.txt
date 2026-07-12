@@ -1,0 +1,19 @@
+public class Solution {
+    public int[] ArrayRankTransform(int[] arr) {
+        int[] temp = arr.Distinct().ToArray();
+        Array.Sort(temp);
+
+        Dictionary<int, int> ranks = new Dictionary<int, int>();
+        int currRank = 1;
+
+        foreach(int value in temp){
+            ranks[value] = currRank++;
+        }
+
+        for(int i = 0; i < arr.Length; i++){
+            arr[i] = ranks[arr[i]];
+        }
+
+        return arr;
+    }
+}
