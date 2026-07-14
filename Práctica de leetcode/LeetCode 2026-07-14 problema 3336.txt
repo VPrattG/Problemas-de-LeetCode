@@ -1,0 +1,52 @@
+public class Solution {
+    const int MODULO = 1000000007;
+    public int SubsequencePairCount(int[] nums) {
+        int m = 0;
+        
+        foreach(int num in nums){
+            m = Math.Max(m, num);
+        }
+
+        int[,] dp = new int[m + 1, m + 1];
+        dp[0, 0] = 1;
+
+        foreach(int num in nums){
+            int[,] ndp = new int[m + 1, m + 1];
+            
+            for(int i = 0; i <= m; i++){
+                int divisor1 = GCD(i, num);
+                for(int j = 0; j <= m; j++){
+                    int value = dp[i, j];
+                    
+                    if(value == 0) continue;
+
+                    int divisor2 = GCD(j, num);
+
+                    ndp[i, j] = (ndp[i, j] + value) % MODULO;
+                    ndp[divisor1, j] = (ndp[divisor1, j] + value) % MODULO;
+                    ndp[i, divisor2] = (ndp[i, divisor2] + value) % MODULO;
+                }
+            }
+
+            dp = ndp;
+        }
+
+        int result = 0;
+
+        for(int i = 1; i <= m; i++){
+            result = (result + dp[i, i]) % MODULO;
+        }
+
+        return result;
+    }
+
+    private int GCD(int a, int b){
+        while(b != 0){
+            int temp = a;
+            a = b;
+            b = temp % b;
+        }
+
+        return a;
+    }
+}
