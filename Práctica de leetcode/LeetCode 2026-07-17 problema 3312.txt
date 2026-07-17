@@ -1,0 +1,53 @@
+public class Solution {
+    public int[] GcdValues(int[] nums, long[] queries) {
+        int m = nums.Max();
+        long[] count = new long[m + 1];
+
+        // Se cuenta la frecuencia de cada número en el arreglo
+        foreach(int num in nums){
+            count[num]++;
+        }
+
+        // Se cuentan los pares que tienen el valor como múltiplo
+        for(int i = 1; i <= m; i++){
+            for(int j = i * 2; j <= m; j += i){
+                count[i] += count[j];
+            }
+        }
+
+        for(int i = 1; i <= m; i++){
+            count[i] = count[i] * (count[i] - 1 ) / 2;
+        }
+
+        // Se remueven los valores que tienen mayor MCD
+        for(int i = m; i >= 1; i--){
+            for(int j = i * 2; j <= m; j += i){
+                count[i] -= count[j];
+            }
+        }
+
+        // Se hace una suma de prefijos para el total de pares
+        for(int i = 1; i <= m; i++){
+            count[i] += count[i - 1];
+        }
+
+        int[] result = new int[queries.Length];
+
+        for(int i = 0; i < queries.Length; i++){
+            long query = queries[i] + 1;
+            int left = 1, right = m;
+            while(left < right){
+                int mid = (left + right) / 2;
+                if(count[mid] >= query){
+                    right = mid;
+                } else{
+                    left = mid + 1;
+                }
+            }
+
+            result[i] = left;
+        }
+
+        return result;
+    }
+}
