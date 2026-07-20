@@ -1,0 +1,26 @@
+public class Solution {
+    public IList<IList<int>> ShiftGrid(int[][] grid, int k) {
+        if(k == 0) return grid;
+
+        int rows = grid.Length, cols = grid[0].Length;
+        int n = rows * cols;
+
+        k %= n;
+        if(k == 0) return grid;
+
+        void Shift(int i, int j){
+            while(i < j){
+                int temp = grid[i / cols][i % cols];
+                grid[i / cols][i % cols] = grid[j / cols][j % cols];
+                grid[j / cols][j % cols] = temp;
+                i++; j--;
+            }
+        }
+
+        Shift(0, n - 1);
+        Shift(0, k - 1);
+        Shift(k, n - 1);
+
+        return grid;
+    }
+}
