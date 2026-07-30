@@ -1,0 +1,9 @@
+public class Solution {
+    public int MinimumPushes(string word) {
+        int n = word.Length / 8;
+        // Máximo de veces para obtener una letra de un número
+        int m = word.Length % 8;
+
+        return (4 * n + m) * (n + 1);
+    }
+}
