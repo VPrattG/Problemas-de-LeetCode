@@ -1,0 +1,19 @@
+public class Solution {
+    public int MinimumPushes(string word) {
+        int[] freq = new int[26];
+
+        foreach(char c in word){
+            freq[c - 'a']++;
+        }
+
+        Array.Sort(freq);
+
+        int res = 0;
+
+        for(int i = 25; i >= 0 && freq[i] > 0; i--){
+            res += freq[i] * ((25 - i) / 8 + 1);
+        }
+
+        return res;
+    }
+}
