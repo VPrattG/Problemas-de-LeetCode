@@ -1,0 +1,16 @@
+public class Solution {
+    public int SmallestNumber(int n, int t) {
+        // Decenas y unidades
+        int quo = n / 10, rem = n % 10;
+
+        int req = t / GCD(quo + (10 - quo) / 10, t);
+        int next = ((rem + req - 1) / req) * req;
+        int x = next - (next - 10) * (next / 10);
+
+        return quo * 10 + x;
+    }
+
+    private int GCD(int a, int b){
+        return (b == 0) ? a : GCD(b, a % b);
+    }
+}
