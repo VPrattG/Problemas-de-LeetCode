@@ -1,0 +1,14 @@
+public class Solution {
+    public bool StoneGameIX(int[] stones) {
+        int[] values = {0, 0, 0};
+
+        foreach(int stone in stones){
+            values[stone % 3]++;
+        }
+
+        if(values[0] % 2 == 0) 
+            return Math.Min(values[1], values[2]) > 0;
+
+        return Math.Abs(values[1] - values[2]) > 2;
+    }
+}
