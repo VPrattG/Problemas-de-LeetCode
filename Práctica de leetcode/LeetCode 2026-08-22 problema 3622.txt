@@ -1,0 +1,14 @@
+public class Solution {
+    public bool CheckDivisibility(int n) {
+        int sum = 0, prod = 1, sub = n;
+
+        while(sub > 0){
+            int mod = sub % 10;
+            sum += mod;
+            prod *= mod;
+            sub /= 10;
+        }
+
+        return n % (sum + prod) == 0;
+    }
+}
