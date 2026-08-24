@@ -1,0 +1,13 @@
+public class Solution {
+    public int StoneGameVIII(int[] stones) {
+        int n = stones.Length;
+        for(int i = 1; i < n; i++)
+            stones[i] += stones[i - 1];
+
+        int result = stones[n - 1];
+        for(int i = n - 2; i > 0; i--)
+            result = Math.Max(result, stones[i] - result);
+
+        return result;
+    }
+}
