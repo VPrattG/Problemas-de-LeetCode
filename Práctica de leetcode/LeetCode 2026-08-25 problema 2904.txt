@@ -1,0 +1,34 @@
+public class Solution {
+    public string ShortestBeautifulSubstring(string s, int k) {
+        int left = 0, right = 0, oneCount = 0;   
+        int resultLength = int.MaxValue;
+        string result = "";
+
+        while(right < s.Length){
+            if(s[right] == '1') oneCount++;
+
+            while(oneCount == k){
+                int curLength = right - left + 1;
+                if(curLength < resultLength){
+                    resultLength = curLength;
+                    result = s.Substring(left, resultLength);
+                } else if (curLength == resultLength){
+                    resultLength = curLength;
+                    int indexNew = left, indexOld = 0;
+
+                    while(indexOld < result.Length && result[indexOld] == s[indexNew]){
+                        indexOld++; indexNew++;
+                    }
+
+                    if(indexOld < result.Length)
+                        result = result[indexOld] == '0' ? result : s.Substring(left, resultLength);
+                }
+                if(s[left++] == '1') oneCount--;
+            }
+
+            right++;
+        }
+
+        return result;
+    }
+}
