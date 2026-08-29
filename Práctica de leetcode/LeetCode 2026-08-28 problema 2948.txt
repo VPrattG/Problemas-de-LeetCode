@@ -1,0 +1,37 @@
+public class Solution {
+    public int[] LexicographicallySmallestArray(int[] nums, int limit) {
+        int[] sorted = new int[nums.Length];
+        for(int i = 0; i < nums.Length; i++){
+            sorted[i] = nums[i];
+        }
+
+        Array.Sort(sorted);
+
+        int curGroup = 0;
+        Dictionary<int, int> numGroup = new Dictionary<int, int>();
+        numGroup[sorted[0]] = curGroup;
+        
+        Dictionary<int, Queue<int>> groupList = new Dictionary<int, Queue<int>>();
+        groupList[curGroup] = new Queue<int>();
+        groupList[curGroup].Enqueue(sorted[0]);
+
+        for(int i = 1; i < nums.Length; i++){
+            if(Math.Abs(sorted[i] - sorted[i - 1]) > limit) curGroup++;
+
+            numGroup[sorted[i]] = curGroup;
+
+            if(!groupList.ContainsKey(curGroup))
+                groupList[curGroup] = new Queue<int>();
+
+            groupList[curGroup].Enqueue(sorted[i]);
+        }
+
+        for(int i = 0; i < nums.Length; i++){
+            int num = nums[i];
+            int group = numGroup[num];
+            nums[i] = groupList[group].Dequeue();
+        }
+
+        return nums;
+    }
+}
