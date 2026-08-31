@@ -1,0 +1,50 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public int val;
+ *     public ListNode next;
+ *     public ListNode(int val=0, ListNode next=null) {
+ *         this.val = val;
+ *         this.next = next;
+ *     }
+ * }
+ */
+public class Solution {
+    public int[] NodesBetweenCriticalPoints(ListNode head) {
+        int[] result = new int[] {-1, -1};
+
+        ListNode prev = head;
+        ListNode dummy = prev.next;
+        
+        int minDistance = int.MaxValue, curIndex = 1;
+        int prevCrit = 0, firstCrit = 0;
+
+        while(dummy.next != null){
+            if(
+                (dummy.val < prev.val && dummy.val < dummy.next.val)
+                || (dummy.val > prev.val && dummy.val > dummy.next.val)
+            ){
+                if(prevCrit == 0){
+                    prevCrit = curIndex;
+                    firstCrit = curIndex;
+                }
+                else {
+                    minDistance = Math.Min(minDistance, curIndex - prevCrit);
+                    prevCrit = curIndex;
+                }
+            }
+
+            curIndex++;
+            prev = dummy;
+            dummy = dummy.next;
+
+        }
+
+        if(minDistance != int.MaxValue){
+            int maxDistance = prevCrit - firstCrit;
+            return new int[] {minDistance, maxDistance};
+        }
+
+        return result;
+    }
+}
