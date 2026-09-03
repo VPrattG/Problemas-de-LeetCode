@@ -1,0 +1,12 @@
+public class Solution {
+    public bool UniformArray(int[] nums1) {
+        int minNum = nums1[0];
+        bool hasOdd = false;
+        foreach(int num in nums1){
+            if(num < minNum) minNum = num;
+            if(num % 2 == 1) hasOdd = true;
+        }
+        if(minNum % 2 == 1) return true;
+        return !hasOdd;
+    }
+}
