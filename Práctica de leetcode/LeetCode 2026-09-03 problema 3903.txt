@@ -1,0 +1,21 @@
+public class Solution {
+    public int FirstStableIndex(int[] nums, int k) {
+        int n = nums.Length;
+        int[] suffix = new int[n];
+        suffix[n - 1] = nums[n - 1];
+
+        // Determina el menor valor encontrado hasta ese punto
+        for(int i = n - 2; i >= 0; i--)
+            suffix[i] = Math.Min(nums[i], suffix[i + 1]);
+
+        // Busca el mayor valor hasta ese punto
+        int currentMax = 0;
+        for(int i = 0; i < n; i++){
+            currentMax = Math.Max(nums[i], currentMax);
+            // También se puede hacer como currentMax - suffix[i] <= k
+            if(currentMax <= k + suffix[i]) return i;
+        }
+
+        return -1;
+    }
+}
