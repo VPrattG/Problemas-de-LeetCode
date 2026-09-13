@@ -1,0 +1,29 @@
+public class Solution {
+    public int LargestOverlap(int[][] img1, int[][] img2) {
+        int n = img1.Length;
+        int maxOverlap = 0;
+
+        int CountOverlap(int shiftX, int shiftY){
+            int count = 0;
+            for(int i = 0; i < n; i++){
+                // Es cuadricular, n funciona para filas y columnas
+                for(int j = 0; j < n; j++){
+                    // Evita errores de valor fuera de rango
+                    if(i + shiftX < 0 || i + shiftX >= n || j + shiftY < 0 || j + shiftY >= n) continue;
+                    if(img1[i][j] == 1 && img2[i + shiftX][j + shiftY] == 1) count++;
+                }
+            }
+
+            return count;
+        }
+
+        for(int i = -n + 1; i < n; i++){
+            for(int j = -n + 1; j < n; j++){
+                // Revisa movimientos hacia arriba y derecha
+                maxOverlap = Math.Max(maxOverlap, CountOverlap(i, j));
+            }
+        }
+
+        return maxOverlap;
+    }
+}
