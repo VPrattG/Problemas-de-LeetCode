@@ -1,0 +1,82 @@
+public class Solution {
+    class Seg{
+        public int left;
+        public int right;
+
+        public Seg(int left = -1, int right = -1){
+            this.left = left;
+            this.right = right;
+        }
+    }
+    public IList<string> MaxNumOfSubstrings(string s) {
+        // Pudo ser algo como Dictionary<char, Dictionary<int, int>> posiblemente
+        // Solo permite caracteres del alfabeto inglés, por ende el límite de 26
+        Seg[] seg = new Seg[26];
+
+        for(int i = 0; i < 26; i++){
+            // Habilita todos los objetos de clase Seg
+            seg[i] = new Seg();
+        }
+
+        for(int i = 0; i < s.Length; i++){
+            int charIdx = s[i] - 'a';
+
+            // La primera vez que se encuentra una letra
+            // Por seguridad, ambas coordenadas se almacenan con el mismo valor
+            if(seg[charIdx].left == -1){
+                seg[charIdx].left = seg[charIdx].right = i;
+            } else {
+                // Actualiza la posición de la última aparición de la letra
+                seg[charIdx].right = i;
+            }
+        }
+
+        for(int i = 0; i < 26; i++){
+            if(seg[i].left != -1){
+                int j = seg[i].left;
+
+                while(j <= seg[i].right){
+                    int charIdx = s[j] - 'a';
+
+                    // Revisa si todas las instancias de la letra existen dentro del subarreglo
+                    if(seg[i].left <= seg[charIdx].left && seg[i].right >= seg[charIdx].right){
+
+                    } else{
+                        // Se "combinan" los subarreglos
+                        seg[i].left = Math.Min(seg[i].left, seg[charIdx].left);
+                        seg[i].right = Math.Max(seg[i].right, seg[charIdx].right);
+                        j = seg[i].left;
+                    }
+
+                    j++;
+                }
+            }
+        }
+
+        Array.Sort(seg, (a, b) => {
+            if(a.right == b.right){
+                return b.left.CompareTo(a.left);
+            }
+
+            return a.right.CompareTo(b.right);
+        });
+
+        IList<string> result = new List<string>();
+        int end = -1;
+
+        foreach(Seg segment in seg){
+            int left = segment.left;
+            int right = segment.right;
+
+            if(left == -1) continue;
+
+            // Revisa si el inicio y fin de los subarreglos no chocan
+            if(end == -1 || left > end){
+                end = right;
+                result.Add(s.Substring(left, right - left + 1));
+            }
+        }
+
+        return result;
+    }
+}
