@@ -1,0 +1,25 @@
+public class Solution {
+    public string Evaluate(string s, IList<IList<string>> knowledge) {
+        Dictionary<string, string> dic = new Dictionary<string, string>();
+        foreach(IList<string> kd in knowledge){
+            dic[kd[0]] = kd[1];
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < s.Length; i++){
+            if (s[i] == '(') {
+                int j = s.IndexOf(')', i + 1);
+                string value = dic.TryGetValue(s.Substring(i + 1, j - i - 1), out string result) 
+                    ? result 
+                    : "?";
+                sb.Append(value);
+                i = j;
+            } else {
+                sb.Append(s[i]);
+            }
+        }
+
+        return sb.ToString();
+    }
+}

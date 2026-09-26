@@ -1,0 +1,34 @@
+public class Solution {
+    public string Evaluate(string s, IList<IList<string>> knowledge) {
+        Dictionary<string, string> dic = new Dictionary<string, string>();
+        foreach(IList<string> kd in knowledge){
+            dic[kd[0]] = kd[1];
+        }
+
+        bool bracketSeen = false;
+
+        StringBuilder result = new StringBuilder();
+        StringBuilder key = new StringBuilder();
+
+        foreach (char c in s) {
+            if (c == '(') {
+                bracketSeen = true;
+            } else if (c == ')'){
+                if (dic.ContainsKey(key.ToString())) {
+                    result.Append(dic[key.ToString()]);
+                } else {
+                    result.Append('?');
+                }
+
+                bracketSeen = false;
+                key.Length = 0;
+            } else if (bracketSeen) {
+                key.Append(c);
+            } else {
+                result.Append(c);
+            }
+        }
+
+        return result.ToString();
+    }
+}
