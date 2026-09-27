@@ -1,0 +1,31 @@
+public class Solution {
+    public string ReverseParentheses(string s) {
+        int n = s.Length;
+        Stack<int> parentheses = new Stack<int>();
+        int[] pair = new int[n];
+
+        for(int i = 0; i < n; i++){
+            if(s[i] == '('){
+                parentheses.Push(i);
+            }
+            if(s[i] == ')'){
+                int j = parentheses.Pop();
+                pair[i] = j;
+                pair[j] = i;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        // i representa el índice actual, j la orientación
+        for(int i = 0, j = 1; i < n; i += j){
+            if (s[i] == '(' || s[i] == ')') {
+                i = pair[i];
+                j = -j;
+            } else {
+                sb.Append(s[i]);
+            }
+        }
+
+        return sb.ToString();
+    }
+}
