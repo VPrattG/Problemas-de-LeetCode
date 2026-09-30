@@ -1,0 +1,12 @@
+public class Solution {
+    public int[] MaxDepthAfterSplit(string seq) {
+        int[] result = new int[seq.Length];
+
+        for(int i = 0; i < seq.Length; i++){
+            // i & 1 es el equivalente binario de i % 2 == 1
+            result[i] = (i & 1) ^ (seq[i] == '(' ? 1 : 0);
+        }
+
+        return result;
+    }
+}
