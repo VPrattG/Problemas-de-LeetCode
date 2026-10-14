@@ -1,0 +1,20 @@
+public class Solution {
+    public string MaxSumOfSquares(int num, int sum) {
+        if (sum > 9 * num) return "";
+        
+        int remainder = sum % 9;
+        StringBuilder sb = new StringBuilder();
+        // Intenta agregar 9 la mayor cantidad de veces
+        sb.Append('9', sum / 9);
+
+        // Intenta agregar el residuo
+        if (remainder > 0) {
+            sb.Append((char) ('0' + remainder));
+        }
+
+        // Rellena el resto con ceros
+        sb.Append('0', num - sb.Length);
+
+        return sb.ToString();
+    }
+}
