@@ -1,0 +1,21 @@
+public class Solution {
+    public IList<int> TargetIndices(int[] nums, int target) {
+        int lesser = 0, equal = 0;
+
+        foreach (int num in nums) {
+            if (num < target) {
+                lesser++;
+            } else if (num == target ) {
+                equal++;
+            }
+        }
+
+        List<int> result = new List<int>();
+
+        for (int i = lesser; i < lesser + equal; i++) {
+            result.Add(i);
+        }
+
+        return result;
+    }
+}
