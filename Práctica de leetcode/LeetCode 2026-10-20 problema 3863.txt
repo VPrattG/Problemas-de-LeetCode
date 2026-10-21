@@ -1,0 +1,32 @@
+public class Solution {
+    public int MinOperations(string s) {
+        int n = s.Length;
+        char max = 'a', min = 'z';
+        bool sorted = true;
+
+        for (int i = 0; i < n; i++) {
+            if (s[i] > max) max = s[i];
+            if (s[i] < min) min = s[i];
+            if (i > 0 && s[i - 1] > s[i]) sorted = false;
+        }
+
+        if (sorted) return 0;
+
+        // Si no está organizado, y es de longitud 2, ya no se puede ajustar
+        if (n == 2) return -1;
+
+        // Solo se tiene que organizar el resto de la cadena
+        if (s[0] == min || s[n - 1] == max) return 1;
+
+        // Los demás casos donde se encuentra en medio
+        for (int i = 1; i < n - 1; i++) {
+            // Se mueve hasta una esquina
+            // Luego se organiza el resto
+            if (s[i] == min || s[i] == max) return 2;
+        }
+
+        // Organiza [0...n-2], cambia n-2 y n-1, y vuelve a ordenar [0...n-2]
+        // o con [1...n-1], 0-1, [1...n-1]
+        return 3;
+    }
+}
