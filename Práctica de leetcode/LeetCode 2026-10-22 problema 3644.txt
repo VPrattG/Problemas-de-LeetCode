@@ -1,0 +1,16 @@
+public class Solution {
+    public int SortPermutation(int[] nums) {
+        int n = nums.Length;
+        int result = int.MaxValue;
+        
+        for (int i = 0; i < n; i++) {
+            // Se ignoran los valores ya organizados
+            if (nums[i] == i) continue;
+            // Se aplica el AND con el resultado actual y nums[i]
+            result &= nums[i];
+        }
+
+        // El 0 es por si el arreglo ya estaba organizado de menor a mayor
+        return result == int.MaxValue ? 0 : result;
+    }
+}
