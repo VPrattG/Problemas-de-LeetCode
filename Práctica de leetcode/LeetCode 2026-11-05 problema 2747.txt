@@ -1,0 +1,36 @@
+public class Solution {
+    public int[] CountServers(int n, int[][] logs, int x, int[] queries) {
+        // Organiza las llamadas según cuándo se hicieron
+        Array.Sort(logs, (a, b) => a[1].CompareTo(b[1]));
+
+        int m = queries.Length;
+        int[] ids = Enumerable.Range(0, m).ToArray();
+        // Organiza el orden en el que ocurren las consultas
+        Array.Sort(ids, (i, j) => queries[i].CompareTo(queries[j]));
+
+        int[] result = new int[m];
+        // Indica la frecuencia de llamadas hechas a cada servidor
+        int[] count = new int[n + 1];
+        int start = 0, end = 0, active = 0;
+
+        foreach (int i in ids) {
+            // El rango que se debe revisar para cada consulta
+            int q = queries[i];
+
+            // Se agregan las consultas hechas antes de q
+            while (end < logs.Length && logs[end][1] <= q) {
+                int id = logs[end++][0];
+                if (count[id]++ == 0) active++;
+            }
+            // Se descartan las consultas hechas antes de q - x
+            while (start < end && logs[start][1] < q - x) {
+                int id = logs[start++][0];
+                if (--count[id] == 0) active--;
+            }
+
+            result[i] = n - active;
+        }
+
+        return result;
+    }
+}
