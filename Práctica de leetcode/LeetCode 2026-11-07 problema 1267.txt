@@ -1,0 +1,28 @@
+public class Solution {
+    public int CountServers(int[][] grid) {
+        int[] rowCount = new int[grid[0].Length];
+        int[] colCount = new int[grid.Length];
+
+        for (int i = 0; i < grid.Length; i++) {
+            for (int j = 0; j < grid[0].Length; j++) {
+                if (grid[i][j] == 1) {
+                    rowCount[j]++;
+                    colCount[i]++;
+                }
+            }
+        }
+
+        int result = 0;
+
+        for (int i = 0; i < grid.Length; i++) {
+            for (int j = 0; j < grid[0].Length; j++) {
+                if (grid[i][j] == 1 &&
+                    (rowCount[j] > 1 || colCount[i] > 1)) {
+                    result++;
+                }
+            }
+        }
+
+        return result;
+    }
+}
